@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario de Bolsas de Tierra</title>
+    <link rel="stylesheet" href="inventario.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Panel lateral -->
+        <aside class="sidebar">
+            <h2>Panel de Inventario</h2>
+            <button id="btnGestion">Gestión de Productos</button>
+            <button id="btnControl">Control de Stock</button>
+            <button id="btnBusqueda">Búsqueda y Filtrado</button>
+            <button id="btnReportes">Reportes y Análisis</button>
+            <button id="btnLogistica">Logística</button>
+            <button id="btnHistorial">Historial de Ajustes</button>
+            <button id="btnVentas">Ventas / Pedidos</button>
+            <button id="btnExportar">Exportar Inventario</button>
+        </aside>
+
+        <!-- Vista principal dinámica -->
+        <main id="mainContent" class="main-view">
+
+            <!-- 1️⃣ Gestión de Productos -->
+            <section id="gestionProductos">
+                <h2>Gestión de Productos</h2>
+                <form id="formProducto">
+                    <input type="text" id="codigo" placeholder="Código/SKU" required>
+                    <input type="text" id="nombre" placeholder="Nombre del producto" required>
+                    <input type="text" id="tipo" placeholder="Tipo de tierra" required>
+                    <input type="number" id="peso" placeholder="Peso (kg)" required>
+                    <input type="number" id="precio" placeholder="Precio" required>
+                    <input type="number" id="costo" placeholder="Costo" required>
+                    <input type="text" id="proveedor" placeholder="Proveedor" required>
+                    <button type="submit">Agregar Producto</button>
+                </form>
+
+                <table id="tablaProductos">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Peso</th>
+                            <th>Precio</th>
+                            <th>Costo</th>
+                            <th>Proveedor</th>
+                            <th>Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Productos agregados dinámicamente -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 2️⃣ Control de Stock -->
+            <section id="controlStock">
+                <h2>Control de Stock</h2>
+                <table id="tablaStock">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Stock</th>
+                            <th>Agregar / Quitar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Productos con stock dinámicamente -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 3️⃣ Búsqueda y Filtrado -->
+            <section id="busqueda">
+                <h2>Búsqueda y Filtrado</h2>
+                <input type="text" id="busquedaInput" placeholder="Buscar por nombre, tipo o código">
+                <div id="resultadoBusqueda" class="resultado-grid">
+                    <!-- Cada producto encontrado se mostrará como tarjeta -->
+                </div>
+            </section>
+
+            <!-- 4️⃣ Reportes y Análisis -->
+            <section id="reportes">
+                <h2>Reportes y Análisis</h2>
+                <p id="stockTotal">Stock total: 0 bolsas</p>
+                <p id="productosMaxStock">Productos con más stock: Ninguno</p>
+
+                <h3>Margen estimado por producto:</h3>
+                <ul id="margenProductos">
+                    <!-- Lista de márgenes -->
+                </ul>
+            </section>
+
+            <!-- 5️⃣ Logística -->
+            <section id="logistica">
+                <h2>Logística</h2>
+                <p>Registrar movimientos de entrada y salida de productos.</p>
+
+                <form id="formMovimiento">
+                    <select id="productoMovimiento">
+                        <option value="">Seleccionar producto</option>
+                    </select>
+                    <select id="tipoMovimiento">
+                        <option value="entrada">Entrada</option>
+                        <option value="salida">Salida</option>
+                    </select>
+                    <input type="number" id="cantidadMovimiento" placeholder="Cantidad" required>
+                    <button type="submit">Registrar Movimiento</button>
+                </form>
+
+                <table id="tablaMovimientos">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Producto</th>
+                            <th>Tipo</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Movimientos dinámicos -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 6️⃣ Historial de Ajustes / Auditoría -->
+            <section id="historial">
+                <h2>Historial de Ajustes</h2>
+                <p>Registros de cambios en productos y stock.</p>
+                <table id="tablaHistorial">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Producto</th>
+                            <th>Acción</th>
+                            <th>Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Historial dinámico -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 7️⃣ Ventas / Pedidos -->
+            <section id="ventas">
+                <h2>Ventas / Pedidos</h2>
+                <form id="formVentas">
+                    <select id="productoVenta">
+                        <option value="">Seleccionar producto</option>
+                    </select>
+                    <input type="number" id="cantidadVenta" placeholder="Cantidad" required>
+                    <button type="submit">Registrar Venta</button>
+                </form>
+
+                <table id="tablaVentas">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Ventas registradas dinámicamente -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 8️⃣ Exportar Inventario -->
+            <section id="exportar">
+                <h2>Exportar Inventario</h2>
+                <button id="btnExportExcel">Exportar a Excel</button>
+                <button id="btnExportPDF">Exportar a PDF</button>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="inventario.js"></script>
+</body>
+</html>
