@@ -1,0 +1,13 @@
+Vamos a crear un proyecto nuevo, estoy trabajando en un local de venta de macetas, plantas y tierra. Supongo que necesito un inventario donde anotar las cosas que tengo a disponibilidad para vender, lo que me interesa es vender. Para eso pense gestionar las ventas, asi como los pedidos que se hace a un proveedor.
+
+Gestion de inventario
+Macetas
+  En el inventario las macetas tienen un n°, marca, modelo, tamaño, color, stock, precio. Para eso quiero que se pueda agregar una maceta al inventario. Tambien seria importante tener la funcionalidad de modificar cada atributo de la maceta. Al momento de agregar una maceta seria bueno que junto a esa funcionalidad de modificar pueda aparecer la posibilidad de eliminar ese producto creado.
+
+Plantas
+Posiblemente a futuro se considere una foto de la planta donde se pueda hacer uso de alguna tecnologia para tomar una foto,ya que se podria considerar que a la hora de agregar una planta se deba
+
+Gestion de venta
+A la hora de vender el vendedor deberia poder buscar la maceta segun sus atributos asi reduce el tiempo de atencion al cliente. para que le aparescan las opciones de buscar una maceta especifica. Es posible que quiera modificar el stock de las macetas
+
+Gestion de compra

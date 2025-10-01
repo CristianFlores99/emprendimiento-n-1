@@ -1,0 +1,38 @@
+[
+  {
+    "numero": 19,
+    "marca": "T.D Plastic S.A",
+    "material": "Rocio",
+    "modelo": "Comun",
+    "color": "Naranja",
+    "stock": 8,
+    "precio": 2500
+  },
+  {
+    "numero": 19,
+    "marca": "T.D.Plastic S.A",
+    "material": "Rocio",
+    "modelo": "Comun",
+    "color": "Amarilla",
+    "stock": 5,
+    "precio": 2500
+  },
+  {
+    "numero": 24,
+    "marca": "T.D Plastic S.A",
+    "material": "Clasica",
+    "modelo": "Comun",
+    "color": "Negro",
+    "stock": 3,
+    "precio": 4000
+  },
+  {
+    "numero": 30,
+    "marca": "T.D Plastic S.A",
+    "material": "Rocio",
+    "modelo": "Redonda",
+    "color": "Violeta",
+    "stock": 2,
+    "precio": 5000
+  }
+]

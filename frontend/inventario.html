@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Inventario</title>
+  <link rel="stylesheet" href="inventario.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Panel lateral -->
+    <aside class="sidebar">
+      <h2>Inventario</h2>
+      <button id="btnInventario">📦 Ver Inventario</button>
+      <button id="btnAgregar">➕ Agregar Maceta</button>
+    </aside>
+
+    <!-- Panel principal -->
+    <main class="main-content">
+      <h1>Gestión de Macetas</h1>
+
+      <!-- Formulario -->
+      <div id="formContainer" class="hidden">
+        <h2 id="formTitle">Agregar Maceta</h2>
+        <form id="macetaForm">
+          <input type="hidden" id="macetaId">
+          <label>N°:
+            <input type="text" id="numero" required>
+          </label>
+          <label>Marca:
+            <input type="text" id="marca" required>
+          </label>
+          <label>Material:
+            <input type="text" id="material">
+          </label>
+          <label>Modelo:
+            <input type="text" id="modelo">
+          </label>
+          <label>Color:
+            <input type="text" id="color">
+          </label>
+          <label>Stock:
+            <input type="number" id="stock" min="0">
+          </label>
+          <label>Precio:
+            <input type="number" id="precio" step="0.01" min="0">
+          </label>
+          <div class="form-buttons">
+            <button type="submit" id="guardarBtn">Guardar</button>
+            <button type="button" id="cancelarBtn">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Buscador -->
+      <div id="buscadorContainer" class="hidden">
+        <label>Buscar: 
+          <input type="text" id="buscador" placeholder="Escribe para filtrar macetas...">
+        </label>
+      </div>
+
+      <!-- Tabla de inventario -->
+      <table id="tablaMacetas" class="hidden">
+        <thead>
+          <tr>
+            <th>N°</th>
+            <th>Marca</th>
+            <th>Material</th>
+            <th>Modelo</th>
+            <th>Color</th>
+            <th>Stock</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- JS llena acá -->
+        </tbody>
+      </table>
+    </main>
+  </div>
+
+  <script src="inventario.js"></script>
+</body>
+</html>
