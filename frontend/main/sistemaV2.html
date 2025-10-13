@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini SPA - Vivero</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#f3f3f3; display:flex; height:100vh;}
+    #menu { width:220px; background:#2f4f4f; color:#fff; padding:20px; display:flex; flex-direction:column; gap:10px;}
+    #menu h2 { text-align:center; border-bottom:1px solid #ccc; padding-bottom:10px; margin-bottom:15px;}
+    #menu button { background:none; border:none; color:white; text-align:left; font-size:16px; padding:8px; cursor:pointer; border-radius:5px;}
+    #menu button:hover { background:#4a6f6f;}
+    #root { flex:1; padding:20px; overflow:auto;}
+    table { width:100%; border-collapse:collapse; margin-top:10px;}
+    th, td { border:1px solid #ccc; padding:6px; text-align:left;}
+    th { background:#e0e0e0;}
+    .btn, .btn-mini { background:#2f4f4f; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; margin:2px;}
+    .btn-mini { font-size:12px;}
+    .btn:hover, .btn-mini:hover { background:#4a6f6f;}
+  </style>
+</head>
+<body>
+  <div id="menu">
+    <h2>🌿 Vivero</h2>
+    <button id="m-plantas">🌸 Plantas</button>
+    <button id="m-macetas">🪴 Macetas</button>
+    <button id="m-tierra">🌱 Tierra</button>
+    <button id="m-demand">💬 Consultas</button>
+  </div>
+  <div id="root"></div>
+
+  <script>
+    // Estado global
+    let state = JSON.parse(localStorage.getItem('viveroState') || '{}');
+    if (!state.plantas) state.plantas = [];
+    if (!state.macetas) state.macetas = [];
+    if (!state.tierra) state.tierra = [];
+    if (!state.demands) state.demands = [];
+
+    function saveState(){ localStorage.setItem('viveroState', JSON.stringify(state)); }
+
+    // Helper: crear elemento
+    function el(tag, attrs={}, ...children){
+      const e=document.createElement(tag);
+      for(const [k,v] of Object.entries(attrs)){
+        if(k.startsWith('on')) e.addEventListener(k.substring(2), v);
+        else e.setAttribute(k,v);
+      }
+      for(const c of children) e.append(c);
+      return e;
+    }
+
+    const root=document.getElementById('root');
+
+    // ==================== PLANTAS ====================
+    document.getElementById('m-plantas').addEventListener('click',()=>{
+      root.innerHTML='';
+      root.appendChild(el('h2',{},'Inventario de Plantas'));
+      const btn=el('button',{class:'btn',onclick:()=>nuevaPlanta()},'➕ Nueva Planta');
+      root.appendChild(btn);
+
+      const t=el('table',{}),
+        thead=el('thead',{},el('tr',{},
+          el('th',{},'Nombre'),
+          el('th',{},'Tipo'),
+          el('th',{},'Interior/Exterior'),
+          el('th',{},'Precio'),
+          el('th',{},'Stock'),
+          el('th',{},'Acciones')
+        )),
+        tbody=el('tbody',{},
+          ...state.plantas.map((p,i)=>el('tr',{},
+            el('td',{},p.nombre),
+            el('td',{},p.tipo),
+            el('td',{},p.ambiente),
+            el('td',{},`$${p.precio}`),
+            el('td',{},p.stock),
+            el('td',{},
+              el('button',{class:'btn-mini',onclick:()=>venderPlanta(i)},'🛒 Vender')
+            )
+          ))
+        );
+      t.append(thead,tbody);
+      root.append(t);
+    });
+
+    function nuevaPlanta(){
+      const nombre=prompt('Nombre de la planta:');
+      const tipo=prompt('Tipo (flor, hoja, suculenta, etc.):');
+      const ambiente=prompt('Ambiente (interior o exterior):');
+      const precio=+prompt('Precio:');
+      const stock=+prompt('Stock disponible:');
+      state.plantas.push({nombre,tipo,ambiente,precio,stock});
+      saveState(); document.getElementById('m-plantas').click();
+    }
+    function venderPlanta(i){
+      const cant=+prompt('Cantidad vendida:');
+      if(cant<=0||cant>state.plantas[i].stock)return alert('Cantidad no válida');
+      state.plantas[i].stock-=cant;
+      saveState(); document.getElementById('m-plantas').click();
+    }
+
+    // ==================== MACETAS ====================
+    document.getElementById('m-macetas').addEventListener('click',()=>{
+      root.innerHTML='';
+      root.appendChild(el('h2',{},'Inventario de Macetas'));
+      const btn=el('button',{class:'btn',onclick:()=>nuevaMaceta()},'➕ Nueva Maceta');
+      root.appendChild(btn);
+
+      const t=el('table',{}),
+        thead=el('thead',{},el('tr',{},
+          el('th',{},'Nombre'),
+          el('th',{},'Modelo'),
+          el('th',{},'Tipo'),
+          el('th',{},'Material'),
+          el('th',{},'Colores'),
+          el('th',{},'Medidas'),
+          el('th',{},'Precio'),
+          el('th',{},'Stock Total'),
+          el('th',{},'Acciones')
+        )),
+        tbody=el('tbody',{},
+          ...state.macetas.map((m,i)=>el('tr',{},
+            el('td',{},m.nombre),
+            el('td',{},m.modelo),
+            el('td',{},m.tipo),
+            el('td',{},m.material),
+            el('td',{},m.colores.join(', ')),
+            el('td',{},`${m.medidas.largo}x${m.medidas.ancho}x${m.medidas.alto}`),
+            el('td',{},`$${m.precio}`),
+            el('td',{},Object.values(m.stockPorColor).reduce((a,b)=>a+b,0)),
+            el('td',{},
+              el('button',{class:'btn-mini',onclick:()=>verMaceta(i)},'🔍 Ver'),
+              el('button',{class:'btn-mini',onclick:()=>venderMaceta(i)},'🛒 Vender')
+            )
+          ))
+        );
+      t.append(thead,tbody);
+      root.append(t);
+    });
+
+    function nuevaMaceta(){
+      const nombre=prompt('Nombre:');
+      const modelo=prompt('Modelo (Jardinera, Redonda, etc.):');
+      const tipo=prompt('Tipo (Clásica, Rocío, etc.):');
+      const material=prompt('Material:');
+      const colores=prompt('Colores separados por coma:').split(',').map(c=>c.trim());
+      const medidas={largo:+prompt('Largo:'), ancho:+prompt('Ancho:'), alto:+prompt('Alto:')};
+      const precio=+prompt('Precio:');
+      const stockPorColor={};
+      colores.forEach(c=>stockPorColor[c]=+prompt(`Stock para ${c}:`));
+      state.macetas.push({nombre,modelo,tipo,material,colores,medidas,precio,stockPorColor});
+      saveState(); document.getElementById('m-macetas').click();
+    }
+    function verMaceta(i){
+      const m=state.macetas[i];
+      root.innerHTML='';
+      root.append(el('h2',{},`Detalle de ${m.nombre}`),
+        el('p',{},`Modelo: ${m.modelo}`),
+        el('p',{},`Tipo: ${m.tipo}`),
+        el('p',{},`Material: ${m.material}`),
+        el('p',{},`Medidas: ${m.medidas.largo}x${m.medidas.ancho}x${m.medidas.alto}`),
+        el('p',{},`Precio: $${m.precio}`),
+        el('h3',{},'Stock por color:'),
+        el('ul',{},...m.colores.map(c=>el('li',{},`${c}: ${m.stockPorColor[c]} unidades`))),
+        el('button',{class:'btn',onclick:()=>document.getElementById('m-macetas').click()},'⬅ Volver')
+      );
+    }
+    function venderMaceta(i){
+      const m=state.macetas[i];
+      const color=prompt(`Color (${m.colores.join(', ')}):`);
+      if(!m.colores.includes(color))return alert('Color inválido');
+      const cant=+prompt('Cantidad vendida:');
+      if(cant<=0||cant>m.stockPorColor[color])return alert('Cantidad no válida');
+      m.stockPorColor[color]-=cant;
+      saveState(); document.getElementById('m-macetas').click();
+    }
+
+    // ==================== TIERRA ====================
+    document.getElementById('m-tierra').addEventListener('click',()=>{
+      root.innerHTML='';
+      root.append(el('h2',{},'Inventario de Tierra y Sustratos'));
+      const btn=el('button',{class:'btn',onclick:()=>nuevaTierra()},'➕ Nuevo Producto');
+      root.append(btn);
+
+      const t=el('table',{}),
+        thead=el('thead',{},el('tr',{},
+          el('th',{},'Nombre'),
+          el('th',{},'Tipo'),
+          el('th',{},'Presentación'),
+          el('th',{},'Peso (kg)'),
+          el('th',{},'Precio'),
+          el('th',{},'Stock'),
+          el('th',{},'Acciones')
+        )),
+        tbody=el('tbody',{},
+          ...state.tierra.map((x,i)=>el('tr',{},
+            el('td',{},x.nombre),
+            el('td',{},x.tipo),
+            el('td',{},x.presentacion),
+            el('td',{},x.peso),
+            el('td',{},`$${x.precio}`),
+            el('td',{},x.stock),
+            el('td',{},el('button',{class:'btn-mini',onclick:()=>venderTierra(i)},'🛒 Vender'))
+          ))
+        );
+      t.append(thead,tbody);
+      root.append(t);
+    });
+
+    function nuevaTierra(){
+      const nombre=prompt('Nombre del producto:');
+      const tipo=prompt('Tipo (Común, Compost, Humus, etc.):');
+      const presentacion=prompt('Presentación (bolsa, a granel, etc.):');
+      const peso=+prompt('Peso (kg):');
+      const precio=+prompt('Precio:');
+      const stock=+prompt('Stock disponible:');
+      state.tierra.push({nombre,tipo,presentacion,peso,precio,stock});
+      saveState(); document.getElementById('m-tierra').click();
+    }
+    function venderTierra(i){
+      const cant=+prompt('Cantidad vendida:');
+      if(cant<=0||cant>state.tierra[i].stock)return alert('Cantidad no válida');
+      state.tierra[i].stock-=cant;
+      saveState(); document.getElementById('m-tierra').click();
+    }
+
+    // ==================== CONSULTAS / DEMANDA ====================
+    document.getElementById('m-demand').addEventListener('click',()=>{
+      root.innerHTML='';
+      root.append(el('h2',{},'Consultas / Demanda'));
+      const btn=el('button',{class:'btn',onclick:()=>nuevaConsulta()},'➕ Registrar consulta');
+      root.append(btn);
+
+      const t=el('table',{}),
+        thead=el('thead',{},el('tr',{},
+          el('th',{},'Fecha'),
+          el('th',{},'Consulta'),
+          el('th',{},'Contacto'),
+          el('th',{},'Estado')
+        )),
+        tbody=el('tbody',{},
+          ...state.demands.map(d=>el('tr',{},
+            el('td',{},new Date(d.date).toLocaleDateString()),
+            el('td',{},d.query),
+            el('td',{},d.contact),
+            el('td',{},d.status)
+          ))
+        );
+      t.append(thead,tbody);
+      root.append(t);
+    });
+
+    function nuevaConsulta(){
+      const query=prompt('¿Qué consulta hizo el cliente?');
+      const contact=prompt('¿Quién preguntó (nombre/teléfono)?');
+      state.demands.push({date:new Date().toISOString(),query,contact,status:'Pendiente'});
+      saveState(); document.getElementById('m-demand').click();
+    }
+
+    // Carga inicial
+    document.getElementById('m-plantas').click();
+////////////////////////////////////////////////////////////////////////////////
+    // ==================== TIERRA / SUSTRATOS ====================
+document.getElementById('m-tierra').addEventListener('click',()=>{
+  root.innerHTML='';
+  root.append(el('h2',{},'Inventario de Tierra y Sustratos'));
+  const btn=el('button',{class:'btn',onclick:()=>nuevaTierra()},'➕ Nuevo Producto');
+  root.append(btn);
+
+  const t=el('table',{}),
+    thead=el('thead',{},el('tr',{},
+      el('th',{},'Nombre'),
+      el('th',{},'Tipo'),
+      el('th',{},'Descripción'),
+      el('th',{},'Tamaño'),
+      el('th',{},'Contenido (dm³)'),
+      el('th',{},'Precio'),
+      el('th',{},'Stock'),
+      el('th',{},'Acciones')
+    )),
+    tbody=el('tbody',{},
+      ...state.tierra.map((x,i)=>el('tr',{},
+        el('td',{},x.nombre),
+        el('td',{},x.tipo),
+        el('td',{},x.descripcion),
+        el('td',{},x.tamano),
+        el('td',{},`${x.contenido_dm3} dm³ (${x.contenido_dm3} L)`),
+        el('td',{},`$${x.precio}`),
+        el('td',{},x.stock),
+        el('td',{},
+          el('button',{class:'btn-mini',onclick:()=>venderTierra(i)},'🛒 Vender')
+        )
+      ))
+    );
+  t.append(thead,tbody);
+  root.append(t);
+});
+
+function nuevaTierra(){
+  const nombre=prompt('Nombre del producto:');
+  const tipo=prompt('Tipo (Fértil, Humus, Compost, etc.):');
+  const descripcion=prompt('Descripción (con perlita, para plantas, orgánica, etc.):');
+  const tamano=prompt('Tamaño (Grande, Mediano, Chico):');
+  let contenido_dm3=25;
+  if(tamano.toLowerCase()==='mediano')contenido_dm3=10;
+  else if(tamano.toLowerCase()==='chico')contenido_dm3=5;
+  const precio=+prompt('Precio:');
+  const stock=+prompt('Stock disponible:');
+  state.tierra.push({nombre,tipo,descripcion,tamano,contenido_dm3,precio,stock});
+  saveState(); document.getElementById('m-tierra').click();
+}
+
+function venderTierra(i){
+  const cant=+prompt('Cantidad vendida:');
+  if(cant<=0||cant>state.tierra[i].stock)return alert('Cantidad no válida');
+  state.tierra[i].stock-=cant;
+  saveState(); document.getElementById('m-tierra').click();
+}
+
+
+  </script>
+</body>
+</html>
