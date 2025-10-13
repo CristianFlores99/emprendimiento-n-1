@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Inventario de Plantas - SPA</title>
+    <link rel="stylesheet" href="inventario.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Inventario - Plantas</h2>
+            <nav>
+                <button id="btnGestion">Gestión</button>
+                <button id="btnStock">Control Stock</button>
+                <button id="btnBusqueda">Búsqueda</button>
+                <button id="btnReportes">Reportes</button>
+                <button id="btnLogistica">Logística</button>
+                <button id="btnVentas">Ventas</button>
+                <button id="btnHistorial">Historial</button>
+                <button id="btnCatalogo">Catálogo</button>
+                <button id="btnCuidados">Recordatorios</button>
+                <button id="btnExport">Exportar</button>
+            </nav>
+            <div class="sidebar-footer">
+                <small>Guardado en localStorage</small>
+            </div>
+        </aside>
+
+        <main class="main-view" id="mainContent">
+            <!-- GESTIÓN -->
+            <section id="gestion" class="section">
+                <h2>Gestión de Plantas</h2>
+                <form id="formProducto" class="form-grid">
+                    <input type="hidden" id="editIndex" value="-1">
+                    <input placeholder="Código / SKU" id="codigo" required>
+                    <input placeholder="Nombre común" id="nombre" required>
+                    <input placeholder="Nombre científico (opcional)" id="cientifico">
+                    <select id="tipo">
+                        <option value="">Tipo (ej: Ornamental)</option>
+                        <option>Ornamental</option>
+                        <option>Frutal</option>
+                        <option>Aromática</option>
+                        <option>Cactus</option>
+                        <option>Suculenta</option>
+                    </select>
+                    <select id="categoria">
+                        <option value="">Categoría (Interior/Exterior)</option>
+                        <option>Interior</option>
+                        <option>Exterior</option>
+                    </select>
+                    <input placeholder="Tamaño/estado (plantín, joven, adulta)" id="tamano">
+                    <input type="number" placeholder="Stock inicial" id="stockInit" min="0" value="0">
+                    <input type="number" placeholder="Costo" id="costo" min="0" step="0.01">
+                    <input type="number" placeholder="Precio de venta" id="precio" min="0" step="0.01">
+                    <input placeholder="Proveedor" id="proveedor">
+                    <input type="file" id="imagen" accept="image/*">
+                    <input placeholder="Riego (ej: 3 días)" id="riego">
+                    <input placeholder="Luz (ej: media sombra)" id="luz">
+                    <input placeholder="Fertilización (ej: mensual)" id="fertilizacion">
+                    <textarea id="observaciones" placeholder="Observaciones" rows="2"></textarea>
+                    <div class="form-actions">
+                        <button type="submit" id="btnAgregar">Guardar planta</button>
+                        <button type="button" id="btnReset">Reset</button>
+                    </div>
+                </form>
+
+                <table id="tablaProductos">
+                    <thead>
+                        <tr>
+                            <th>SKU</th><th>Nombre</th><th>Tipo</th><th>Tamaño</th><th>Precio</th><th>Stock</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- STOCK -->
+            <section id="stock" class="section">
+                <h2>Control de Stock</h2>
+                <table id="tablaStock">
+                    <thead><tr><th>SKU</th><th>Nombre</th><th>Stock</th><th>Ajustar</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- BÚSQUEDA -->
+            <section id="busqueda" class="section">
+                <h2>Búsqueda y Catálogo Rápido</h2>
+                <input id="busquedaInput" class="input-busqueda" placeholder="Buscar por nombre, tipo o SKU">
+                <div id="resultadoBusqueda" class="resultado-grid"></div>
+            </section>
+
+            <!-- REPORTES -->
+            <section id="reportes" class="section">
+                <h2>Reportes y Análisis</h2>
+                <div class="report-cards">
+                    <div class="card"><strong id="stockTotal">0</strong><small>Stock total (unidades)</small></div>
+                    <div class="card"><strong id="valorStock">$0.00</strong><small>Valor en costo</small></div>
+                    <div class="card"><strong id="valorVenta">$0.00</strong><small>Valor potencial venta</small></div>
+                </div>
+
+                <h3>Margen por planta</h3>
+                <ul id="margenList"></ul>
+            </section>
+
+            <!-- LOGÍSTICA -->
+            <section id="logistica" class="section">
+                <h2>Logística - Movimientos</h2>
+                <form id="formMovimiento" class="form-inline">
+                    <select id="productoMovimiento"></select>
+                    <select id="tipoMovimiento">
+                        <option value="entrada">Entrada</option>
+                        <option value="salida">Salida</option>
+                        <option value="ajuste">Ajuste</option>
+                    </select>
+                    <input type="number" id="cantidadMovimiento" placeholder="Cantidad" min="1">
+                    <button type="submit">Registrar</button>
+                </form>
+
+                <table id="tablaMovimientos">
+                    <thead><tr><th>Fecha</th><th>Producto</th><th>Tipo</th><th>Cantidad</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- VENTAS -->
+            <section id="ventas" class="section">
+                <h2>Ventas / Pedidos</h2>
+                <form id="formVentas" class="form-inline">
+                    <select id="productoVenta"></select>
+                    <input type="number" id="cantidadVenta" placeholder="Cantidad" min="1">
+                    <button type="submit">Registrar Venta</button>
+                </form>
+
+                <table id="tablaVentas">
+                    <thead><tr><th>Fecha</th><th>Producto</th><th>Cantidad</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- HISTORIAL -->
+            <section id="historial" class="section">
+                <h2>Historial / Auditoría</h2>
+                <table id="tablaHistorial">
+                    <thead><tr><th>Fecha</th><th>Producto</th><th>Acción</th><th>Detalle</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- CATALOGO -->
+            <section id="catalogo" class="section">
+                <h2>Catálogo Digital</h2>
+                <div id="catalogoGrid" class="resultado-grid"></div>
+
+                <!-- Modal simple para ver detalle -->
+                <div id="modal" class="modal hidden">
+                    <div class="modal-content">
+                        <button class="modal-close" id="modalClose">&times;</button>
+                        <div id="modalBody"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CUIDADOS / RECORDATORIOS -->
+            <section id="cuidados" class="section">
+                <h2>Recordatorios de Cuidados</h2>
+                <p>Define la frecuencia (en días) en el campo "Riego" o "Fertilización" al crear la planta (ej: "7 días") y usa "Marcar realizado" para avanzar la próxima fecha.</p>
+                <div id="recordatoriosList"></div>
+            </section>
+
+            <!-- EXPORT -->
+            <section id="export" class="section">
+                <h2>Exportar Inventario</h2>
+                <button id="btnExportExcel">Exportar a Excel (CSV)</button>
+                <button id="btnExportPDF">Exportar a PDF</button>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="inventario.js"></script>
+</body>
+</html>
