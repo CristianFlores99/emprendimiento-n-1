@@ -1,5 +1,4 @@
-const GRAPHQL_URL = "https://app.nhost.io/orgs/krgieivyovrdgxrqlzwx/projects/wnbnfdxurjqmpyrwlrsb/database/browser/default"
-const TOKEN = "TU_TOKEN_PUBLICO"
+const GRAPHQL_URL = "https://vpdlhyyklxacypdppqwp.graphql.eu-central-1.nhost.run/v1";
 
 async function cargarInventario() {
   const query = `
@@ -12,21 +11,25 @@ async function cargarInventario() {
         precio
       }
     }
-  `
+  `;
 
   const res = await fetch(GRAPHQL_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${TOKEN}`
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query })
-  })
+  });
 
-  const data = await res.json()
-  const productos = data.data.producto
+  const data = await res.json();
 
-  const tbody = document.querySelector("#tabla-inventario tbody")
+  if (!data.data) {
+    console.error("Error:", data);
+    alert("No se pudieron cargar los productos. Ver consola.");
+    return;
+  }
+
+  const productos = data.data.producto;
+  const tbody = document.querySelector("#tabla-inventario tbody");
+
   tbody.innerHTML = productos.map(p => `
     <tr>
       <td>${p.id_producto}</td>
@@ -35,7 +38,7 @@ async function cargarInventario() {
       <td>${new Date(p.fecha_creacion).toLocaleDateString()}</td>
       <td>$${p.precio}</td>
     </tr>
-  `).join("")
+  `).join("");
 }
 
-cargarInventario()
+cargarInventario();
