@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario de Macetas</title>
+  <link rel="stylesheet" href="css/ver_macetas.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>Gestión de Macetas</h2>
+      <button onclick="window.location.href='index.html'">Volver</button>
+      <button id="btnVerInventario">Ver Inventario</button>
+      <button id="btnAgregarMaceta">Agregar Maceta</button>
+      <button id="btnAgregarColor">Agregar Color</button>
+      <button id="btnRecargar">Recargar</button>
+    </div>
+    <!-- Fin Sidebar -->
+
+    <!-- Zona principal -->
+    <div class="main" id="zonaPrincipal" style="display:none;">
+      <h1>Listado de Macetas</h1>
+      <p>Visualizá los modelos, colores y stock registrados.</p>
+
+      <!-- Buscador -->
+      <div class="search-bar" style="margin: 12px 0;">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Buscar por número, descripción, modelo, color, stock, precio o estado..."
+        />
+      </div>
+
+      <!-- Tabla de macetas -->
+      <table id="tablaMacetas"></table>
+    </div>
+    <!-- Fin Zona principal -->
+
+<!-- Modal Agregar Maceta -->
+<div id="formAgregarMaceta" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span id="btnCancelarAgregar" class="close">&times;</span>
+    <h2>Agregar Nueva Maceta</h2>
+    <form id="agregarMacetaForm">
+          <label>Número:</label>
+      <input type="number" id="numero" required />
+      <label>Descripción:</label>
+      <input type="text" id="descripcion" required />
+      <label>Modelo:</label>
+      <input type="text" id="modelo" required />
+      <label>Altura (cm):</label>
+      <input type="number" id="altura" required />
+      <label>Ancho (cm):</label>
+      <input type="number" id="ancho" required />
+      <label>Largo (cm):</label>
+      <input type="number" id="largo" required />
+      <label>Precio de Venta:</label>
+      <input type="number" id="precio_venta" required />
+      <button type="submit">Guardar Maceta</button>
+    </form>
+  </div>
+</div>
+    <!-- Fin Modal -->
+
+  </div>
+  <!-- Fin Container -->
+
+  <script type="module" src="js/ver_macetas.js"></script>
+</body>
+</html>

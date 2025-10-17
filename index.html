@@ -3,29 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventario de Productos</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <script type="module" src="js/script.js"></script>
+  <title>Panel Principal</title>
+  <link rel="stylesheet" href="css/ver_macetas.css">
 </head>
 <body>
-  <header>
-    <h1>Inventario de Productos</h1>
-  </header>
-  <main>
-    <table id="tabla-inventario">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Tipo</th>
-          <th>Stock</th>
-          <th>Fecha Creación</th>
-          <th>Precio</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Datos cargados por JS -->
-      </tbody>
-    </table>
-  </main>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>Panel Principal</h2>
+      <button onclick="window.location.href='ver_macetas.html'">Ver Macetas</button>
+      <button id="btnVerProveedores">Ver Proveedores</button>
+      <!-- Podés agregar más botones según funcionalidades futuras -->
+    </div>
+
+    <!-- Main content -->
+    <div class="main">
+      <h1>Bienvenido al Panel de Inventario</h1>
+      <p>Usa los botones del panel izquierdo para navegar entre vistas y administrar macetas, colores y proveedores.</p>
+      <div id="contenido"></div>
+    </div>
+  </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+
+const supabaseUrl = 'https://ovfsffckhzelgbgohakv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92ZnNmZmNraHplbGdiZ29oYWt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NTA0MjYsImV4cCI6MjA3NjIyNjQyNn0.hDiIhAHAr04Uo9todWdk0QUaqD3RYj5kMkITavzPiHc';
+const supabase = createClient(supabaseUrl, supabaseKey);
+    // Funciones de navegación simple
+    const contenido = document.getElementById("contenido");
+
+    document.getElementById("btnVerMacetas").addEventListener("click", () => {
+      // Abrir la página ver_macetas.html dentro de un iframe o redirigir
+      window.location.href = "ver_macetas.html";
+    });
+
+    document.getElementById("btnVerProveedores").addEventListener("click", () => {
+      alert("Aquí se abriría la vista de proveedores (a implementar)");
+    });
+  </script>
 </body>
 </html>
