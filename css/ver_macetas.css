@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* -------------------- CONTAINER -------------------- */
@@ -14,46 +14,55 @@
 }
 
 /* -------------------- SIDEBAR -------------------- */
+/* -------------------- SIDEBAR -------------------- */
 .sidebar {
   width: 260px;
   background-color: #0f172a;
   color: #fff;
   padding: 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* ya estaba */
+  align-items: flex-start; /* alineamos a la izquierda */
+  gap: 10px;
 }
 
 .sidebar h2 {
   margin-bottom: 20px;
   font-size: 1.5rem;
+  font-weight: 600;
+  white-space: nowrap; /* evita que el texto se corte en 2 líneas */
+  overflow: hidden; 
+  text-overflow: ellipsis; 
 }
 
+
 .sidebar button {
-  margin: 6px 0;
-  padding: 10px 12px;
+  padding: 10px 14px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: #1e293b;
   color: #fff;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.2s;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
 }
 
 .sidebar button:hover {
   background-color: #334155;
+  transform: translateY(-2px);
 }
 
 /* -------------------- ZONA PRINCIPAL -------------------- */
 .main {
   flex: 1;
-  padding: 20px;
+  padding: 24px;
   overflow-y: auto;
 }
 
 .main h1 {
   margin-bottom: 10px;
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: #111827;
 }
 
@@ -65,10 +74,36 @@
 /* -------------------- BUSCADOR -------------------- */
 .search-bar input {
   width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+/* -------------------- BOTÓN AGREGAR COLOR -------------------- */
+#btnAgregarColor {
+  padding: 10px 16px;
   margin-bottom: 12px;
+  background-color: #10b981;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+#btnAgregarColor:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
 }
 
 /* -------------------- TABLA -------------------- */
@@ -76,14 +111,17 @@ table {
   width: 100%;
   border-collapse: collapse;
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 table th, table td {
   text-align: left;
-  padding: 12px;
+  padding: 14px 12px;
   border-bottom: 1px solid #e5e7eb;
+  font-size: 0.95rem;
+  color: #374151;
 }
 
 table th {
@@ -96,84 +134,129 @@ table tr:hover {
   background-color: #f9fafb;
 }
 
-/* -------------------- MENSAJES -------------------- */
-#mensaje {
-  margin-bottom: 12px;
+/* -------------------- BOTONES DE ACCIONES EN TABLA -------------------- */
+.btnEditarColor, .btnEliminarColor {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
   font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  margin-right: 4px;
 }
 
-/* -------------------- MODAL AGREGAR MACETA -------------------- */
-/* Modal */
+.btnEditarColor {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+.btnEditarColor:hover {
+  background-color: #2563eb;
+  transform: scale(1.05);
+}
+
+.btnEliminarColor {
+  background-color: #ef4444;
+  color: #fff;
+}
+
+.btnEliminarColor:hover {
+  background-color: #b91c1c;
+  transform: scale(1.05);
+}
+
+/* -------------------- MENSAJES -------------------- */
+#mensaje {
+  margin-bottom: 16px;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* -------------------- MODAL -------------------- */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(15, 23, 42, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding: 12px;
 }
 
 .modal-content {
   background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  max-width: 90%;
+  padding: 24px;
+  border-radius: 12px;
+  width: 420px;
+  max-width: 95%;
   position: relative;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
 .modal .close {
   position: absolute;
-  right: 12px;
-  top: 12px;
+  right: 16px;
+  top: 16px;
   font-size: 1.5rem;
   cursor: pointer;
+  color: #374151;
+  transition: color 0.2s;
 }
 
+.modal .close:hover {
+  color: #111827;
+}
 
 .modal-content h2 {
-  margin-bottom: 12px;
-  font-size: 1.25rem;
+  margin-bottom: 16px;
+  font-size: 1.4rem;
   color: #111827;
 }
 
 .modal-content label {
   display: block;
-  margin-top: 8px;
-  margin-bottom: 4px;
+  margin-top: 10px;
+  margin-bottom: 6px;
   font-weight: 500;
   color: #374151;
 }
 
-.modal-content input {
+.modal-content input,
+.modal-content select {
   width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
 }
 
-.modal-content button {
-  margin-top: 10px;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
+.modal-content input:focus,
+.modal-content select:focus {
+  outline: none;
+  border-color: #3b82f6;
 }
 
 .modal-content button[type="submit"] {
+  margin-top: 12px;
+  padding: 10px 16px;
   background-color: #10b981;
   color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .modal-content button[type="submit"]:hover {
   background-color: #059669;
+  transform: translateY(-2px);
 }
 
 /* -------------------- RESPONSIVE -------------------- */
@@ -186,6 +269,7 @@ table tr:hover {
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
+    padding: 12px;
   }
 
   .sidebar button {
@@ -194,27 +278,12 @@ table tr:hover {
   }
 
   .main {
-    padding: 12px;
+    padding: 16px;
   }
 
   .modal-content {
-    margin: 40px auto;
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
   }
-}
-
-/* -------------------- BOTONES DE ACCIONES -------------------- */
-.btnEditar {
-  padding: 6px 12px;
-  background-color: #3b82f6; /* Azul */
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: background-color 0.2s, transform 0.1s;
-}
-
-.btnEditar:hover {
-  background-color: #2563eb; /* Azul más oscuro */
-  transform: scale(1.05);
 }

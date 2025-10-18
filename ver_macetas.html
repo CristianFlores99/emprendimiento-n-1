@@ -15,29 +15,31 @@
       <button onclick="window.location.href='index.html'">Volver</button>
       <button id="btnVerInventario">Ver Inventario</button>
       <button id="btnAgregarMaceta">Agregar Maceta</button>
-      <button id="btnAgregarColor">Agregar Color</button>
+
       <button id="btnRecargar">Recargar</button>
     </div>
     <!-- Fin Sidebar -->
 
-    <!-- Zona principal -->
     <div class="main" id="zonaPrincipal" style="display:none;">
-      <h1>Listado de Macetas</h1>
-      <p>Visualizá los modelos, colores y stock registrados.</p>
+  <h1>Listado de Macetas</h1>
+  <p>Visualizá los modelos, colores y stock registrados.</p>
 
-      <!-- Buscador -->
-      <div class="search-bar" style="margin: 12px 0;">
-        <input
-          id="searchInput"
-          type="search"
-          placeholder="Buscar por número, descripción, modelo, color, stock, precio o estado..."
-        />
-      </div>
+  <!-- Buscador -->
+  <div class="search-bar" style="margin: 12px 0;">
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="Buscar por número, descripción, modelo, color, stock, precio o estado..."
+    />
+  </div>
 
-      <!-- Tabla de macetas -->
-      <table id="tablaMacetas"></table>
-    </div>
-    <!-- Fin Zona principal -->
+  <!-- Botón agregar color -->
+  <button id="btnAgregarColor">Agregar Color</button>
+
+  <!-- Tabla de macetas -->
+  <table id="tablaMacetas"></table>
+</div>
+
 
     <!-- Modal Agregar Maceta -->
     <div id="formAgregarMaceta" class="modal" style="display:none;">
@@ -66,31 +68,29 @@
     <!-- Fin Modal Maceta -->
 
     <!-- Modal Agregar Color -->
-<div id="formAgregarColor" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span id="btnCancelarAgregarColor" class="close">&times;</span>
-    <h2>Agregar Nuevo Color a Maceta</h2>
-    <form id="agregarColorForm">
-      <label>Maceta:</label>
-      <select id="selectMaceta" required>
-        <option value="">Seleccioná una maceta</option>
-      </select>
+    <div id="formAgregarColor" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span id="btnCancelarAgregarColor" class="close">&times;</span>
+        <h2>Agregar / Editar Color de Maceta</h2>
+        <form id="agregarColorForm">
+          <label>Maceta:</label>
+          <select id="selectMaceta" required>
+            <option value="">Seleccioná una maceta</option>
+          </select>
 
-      <label>Color:</label>
-      <input type="text" id="color" required />
+          <label>Color:</label>
+          <input type="text" id="color" required />
 
-      <label>Stock:</label>
-      <input type="number" id="stock" value="0" min="0" required />
+          <label>Stock:</label>
+          <input type="number" id="stock" value="0" min="0" required />
 
-      <button type="submit">Guardar Color</button>
-    </form>
-  </div>
-</div>
-
+          <button type="submit" id="btnGuardarColor">Guardar Color</button>
+        </form>
+      </div>
+    </div>
     <!-- Fin Modal Color -->
 
   </div>
-  <!-- Fin Container -->
 
   <script type="module" src="js/ver_macetas.js"></script>
 </body>
