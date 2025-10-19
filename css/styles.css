@@ -1,0 +1,113 @@
+/* -------------------- Reset -------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: #f4f6fb;
+  color: #111;
+}
+
+/* -------------------- Container -------------------- */
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* -------------------- Sidebar -------------------- */
+.sidebar {
+  width: 220px;
+  background-color: #0f172a;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  transition: width 0.3s;
+}
+
+.sidebar h2 {
+  font-size: 1.6rem;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #93c5fd;
+}
+
+.sidebar button {
+  background: none;
+  color: #fff;
+  border: none;
+  text-align: left;
+  padding: 12px 10px;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar button:hover {
+  background-color: #1e40af;
+  color: #fff;
+}
+
+.sidebar button:active {
+  background-color: #2563eb;
+}
+
+/* -------------------- Main -------------------- */
+.main {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.main h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #0f172a;
+}
+
+.main p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #334155;
+}
+
+/* -------------------- Botones en Main -------------------- */
+.main button {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  margin-top: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.main button:hover {
+  background-color: #1e40af;
+}
+
+/* -------------------- Responsivo -------------------- */
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 15px;
+  }
+  .sidebar h2 {
+    display: none;
+  }
+  .main {
+    padding: 20px;
+  }
+}
