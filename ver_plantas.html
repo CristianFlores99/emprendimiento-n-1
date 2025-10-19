@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestión de Plantas</title>
+  <link rel="stylesheet" href="css/ver_plantas.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <h2>Gestión de Plantas</h2>
+      <button class="btn-nav" data-section="inventario">Ver Inventario</button>
+    </aside>
+
+    <main class="content">
+      <section id="inventario" class="section active">
+        <div class="header">
+            <button id="btnVolver" class="btn-volver">← Volver</button>
+          <h1>Inventario de Plantas</h1>
+          <button id="btnAgregar" class="btn-agregar">+ Agregar Planta</button>
+        </div>
+
+        <div class="buscador">
+            <input type="text" id="inputBuscar" placeholder="Buscar por nombre, tipo o variedad...">
+        </div>
+
+        <table id="tablaPlantas">
+          <thead>
+            <tr>
+              <th>Nombre Comercial</th>
+              <th>Tipo</th>
+              <th>Tamaño</th>
+              <th>Variedad</th>
+              <th>Precio Costo</th>
+              <th>Precio Venta</th>
+              <th>Stock</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <!-- 🌿 MODAL FORMULARIO -->
+  <div id="modalForm" class="modal oculto">
+    <div class="modal-content">
+      <span class="cerrar">&times;</span>
+      <h2 id="modalTitulo">Agregar Planta</h2>
+      <form id="formPlanta">
+        <input type="hidden" id="id_planta">
+        <input type="text" id="nombre_comercial" placeholder="Nombre comercial" required>
+        <input type="text" id="tipo" placeholder="Tipo" required>
+        <input type="text" id="tamaño" placeholder="Tamaño" required>
+        <input type="text" id="variedad" placeholder="Variedad" required>
+        <input type="number" id="precio_costo" placeholder="Precio costo" required>
+        <input type="number" id="precio_venta" placeholder="Precio venta" required>
+        <input type="number" id="stock" placeholder="Stock" required>
+        <select id="estado" required>
+          <option value="disponible">Disponible</option>
+          <option value="no disponible">No disponible</option>
+        </select>
+
+        <button type="submit" class="btn-guardar">Guardar</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/ver_plantas.js"></script>
+</body>
+</html>

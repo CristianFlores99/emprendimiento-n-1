@@ -1,326 +1,275 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// 🔗 Configuración de conexión a Supabase
 const supabaseUrl = 'https://ovfsffckhzelgbgohakv.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92ZnNmZmNraHplbGdiZ29oYWt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NTA0MjYsImV4cCI6MjA3NjIyNjQyNn0.hDiIhAHAr04Uo9todWdk0QUaqD3RYj5kMkITavzPiHc';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// 📦 Referencias al DOM
-const tabla = document.getElementById('tablaMacetas');
-const searchInput = document.getElementById('searchInput');
-const btnRecargar = document.getElementById('btnRecargar');
-const btnVerInventario = document.getElementById("btnVerInventario");
-const btnAgregarMaceta = document.getElementById("btnAgregarMaceta");
-const btnCancelarAgregar = document.getElementById("btnCancelarAgregar");
-const agregarMacetaForm = document.getElementById("agregarMacetaForm");
-const formAgregarMaceta = document.getElementById("formAgregarMaceta");
-const zonaPrincipal = document.getElementById("zonaPrincipal");
+// ---------------- Secciones ----------------
+const sectionMacetas = document.getElementById("sectionMacetas");
+const sectionInventario = document.getElementById("sectionInventario");
 
-// 🟢 Mensajes
-let divMensaje = document.getElementById("mensaje");
-if (!divMensaje) {
-  divMensaje = document.createElement("div");
-  divMensaje.id = "mensaje";
-  divMensaje.style.margin = "8px 0";
-  zonaPrincipal.prepend(divMensaje);
-}
-
-function mostrarMensaje(texto, tipo = "success") {
-  divMensaje.textContent = texto;
-  divMensaje.style.color = tipo === "success" ? "#10b981" : "#ef4444";
-  setTimeout(() => divMensaje.textContent = "", 4000);
-}
-
-// 🌟 Datos en memoria
-let macetasData = [];
-
-// ------------------- MODAL MACETA -------------------
-btnAgregarMaceta?.addEventListener("click", abrirModal);
-
-function abrirModal() {
-  formAgregarMaceta.style.display = 'flex';
-  tabla.style.display = 'table';
-  searchInput.parentElement.style.display = 'block';
-  agregarMacetaForm.reset();
-  agregarMacetaForm.onsubmit = agregarNuevaMaceta;
-}
-
-btnCancelarAgregar?.addEventListener("click", cerrarModal);
-
-function cerrarModal() {
-  formAgregarMaceta.style.display = 'none';
-  agregarMacetaForm.reset();
-  tabla.style.display = 'table';
-  searchInput.parentElement.style.display = 'block';
-  agregarMacetaForm.onsubmit = agregarNuevaMaceta;
-}
-
-// ------------------- GUARDAR MACETA -------------------
-async function agregarNuevaMaceta(e) {
-  e.preventDefault();
-  const nuevaMaceta = {
-    descripcion: document.getElementById("descripcion").value.trim(),
-    numero: parseInt(document.getElementById("numero").value),
-    modelo: document.getElementById("modelo").value.trim(),
-    altura_cm: parseFloat(document.getElementById("altura").value),
-    ancho_cm: parseFloat(document.getElementById("ancho").value),
-    largo_cm: parseFloat(document.getElementById("largo").value),
-    precio_venta: parseFloat(document.getElementById("precio_venta").value)
-  };
-
-  if (!nuevaMaceta.descripcion || !nuevaMaceta.modelo || isNaN(nuevaMaceta.numero)) {
-    mostrarMensaje("Completá todos los campos obligatorios.", "error");
-    return;
-  }
-
-  try {
-    const { error } = await supabase.from("maceta").insert([nuevaMaceta]);
-    if (error) throw error;
-
-    mostrarMensaje("Maceta agregada correctamente ✅", "success");
-    cerrarModal();
-    cargarMacetas();
-  } catch (err) {
-    console.error("Error al agregar maceta:", err);
-    mostrarMensaje("Error al agregar la maceta ❌", "error");
-  }
-}
-
-// ------------------- BOTONES -------------------
-btnVerInventario?.addEventListener("click", () => {
-  zonaPrincipal.style.display = "block";
-  cargarMacetas();
+// ---------------- Botones ----------------
+document.getElementById("btnVerMacetas").addEventListener("click", () => {
+  sectionMacetas.classList.remove("oculto");
+  sectionInventario.classList.add("oculto");
+  btnVerMacetas.classList.add("active");
+  btnVerInventario.classList.remove("active");
 });
+document.getElementById("btnVerInventario").addEventListener("click", () => {
+  sectionMacetas.classList.add("oculto");
+  sectionInventario.classList.remove("oculto");
+  btnVerInventario.classList.add("active");
+  btnVerMacetas.classList.remove("active");
+});
+document.getElementById("btnVolver").addEventListener("click", () => window.location.href = "index.html");
 
-btnRecargar?.addEventListener('click', cargarMacetas);
+// ---------------- Modales ----------------
+const modalMaceta = document.getElementById("modalMaceta");
+const modalColor = document.getElementById("modalColor");
+const formMaceta = document.getElementById("formMaceta");
+const formColor = document.getElementById("formColor");
 
-// ------------------- CARGAR MACETAS -------------------
+document.getElementById("btnAgregarMaceta").addEventListener("click", () => abrirModal(modalMaceta, "Agregar Maceta", formMaceta));
+document.getElementById("btnAgregarColor").addEventListener("click", () => abrirModal(modalColor, "Agregar Color", formColor));
+
+function abrirModal(modal, titulo, form){
+  form.reset();
+  form.querySelector("input[type=hidden]").value = "";
+  modal.querySelector("h2").textContent = titulo;
+  modal.classList.remove("oculto");
+}
+
+document.querySelectorAll(".cerrar").forEach(span => 
+  span.addEventListener("click", () => span.closest(".modal").classList.add("oculto"))
+);
+
+// ---------------- Tablas ----------------
+const tablaMacetas = document.querySelector("#tablaMacetas tbody");
+const tablaInventario = document.querySelector("#tablaInventario tbody");
+
+// Datos
+let listaMacetas = [];
+let listaColores = [];
+
+// ---------------- Función normalizar ----------------
+function normalizar(str){
+  if(!str) return '';
+  return str.toString().normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+}
+
+// ---------------- Cargar Macetas ----------------
 async function cargarMacetas() {
-  try {
-    const { data, error } = await supabase
-      .from('maceta_color')
-      .select(`
-        id_maceta_color,
-        color,
-        stock,
-        estado,
-        maceta: id_maceta (
-          id_maceta,
-          numero,
-          descripcion,
-          modelo,
-          altura_cm,
-          ancho_cm,
-          largo_cm,
-          precio_venta
-        )
-      `);
-
-    if (error) throw error;
-
-    macetasData = data;
-    mostrarTabla(macetasData);
-  } catch (err) {
-    console.error('Error al cargar macetas:', err);
-    tabla.innerHTML = `<tr><td colspan="8" style="color:red;">Error al cargar datos.</td></tr>`;
-  }
+  const { data, error } = await supabase.from("maceta").select("*").order("numero");
+  if(error) return console.error(error);
+  listaMacetas = data;
+  renderTablaMacetas(listaMacetas);
+  renderSelectMacetas();
 }
 
-// ------------------- MOSTRAR TABLA -------------------
-function mostrarTabla(data) {
-  let html = `
-    <tr>
-      <th>Número</th>
-      <th>Descripción</th>
-      <th>Modelo</th>
-      <th>Color</th>
-      <th>Stock</th>
-      <th>Precio Venta</th>
-      <th>Estado</th>
-      <th>Acciones</th>
-    </tr>
-  `;
+function renderTablaMacetas(datos){
+  tablaMacetas.innerHTML = "";
+  datos.forEach(m => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${m.numero}</td>
+      <td>${m.descripcion}</td>
+      <td>${m.modelo}</td>
+      <td>${m.altura_cm}</td>
+      <td>${m.ancho_cm}</td>
+      <td>${m.largo_cm}</td>
+      <td>$${m.precio_venta}</td>
+      <td>
+        <button class="btn-editar" data-id="${m.id_maceta}">✏️ Editar</button>
+        <button class="btn-eliminar" data-id="${m.id_maceta}">🗑️ Eliminar</button>
+      </td>
+    `;
+    tablaMacetas.appendChild(tr);
+  });
 
-  if (!data || data.length === 0) {
-    html += `<tr><td colspan="8">No hay registros.</td></tr>`;
-  } else {
-    for (const item of data) {
-      html += `
-        <tr data-id="${item.id_maceta_color}">
-          <td>${item.maceta?.numero ?? '-'}</td>
-          <td>${item.maceta?.descripcion ?? '-'}</td>
-          <td>${item.maceta?.modelo ?? '-'}</td>
-          <td>${item.color ?? '-'}</td>
-          <td>${item.stock ?? 0}</td>
-          <td>$${item.maceta?.precio_venta?.toFixed(2) ?? '-'}</td>
-          <td>${item.estado ?? '-'}</td>
-          <td>
-            <button class="btnEditarColor" data-id="${item.id_maceta_color}">✏️ Editar Color</button>
-            <button class="btnEliminarColor" data-id="${item.id_maceta_color}">🗑️ Eliminar Color</button>
-          </td>
-        </tr>
-      `;
-    }
-  }
-
-  tabla.innerHTML = html;
-
-  // Asignar eventos a los botones
-  document.querySelectorAll('.btnEditarColor').forEach(btn =>
-    btn.addEventListener('click', () => abrirEditarColor(btn.dataset.id))
+  // Eventos Editar
+  document.querySelectorAll("#tablaMacetas .btn-editar").forEach(btn => 
+    btn.addEventListener("click", () => editarMaceta(btn.dataset.id))
   );
 
-  document.querySelectorAll('.btnEliminarColor').forEach(btn =>
-    btn.addEventListener('click', () => eliminarColor(btn.dataset.id))
+  // Eventos Eliminar
+  document.querySelectorAll("#tablaMacetas .btn-eliminar").forEach(btn => 
+    btn.addEventListener("click", () => eliminarMaceta(btn.dataset.id))
   );
 }
 
-// ------------------- EDITAR COLOR -------------------
-const formEditarColor = document.getElementById("formAgregarColor");
-const editarColorForm = document.getElementById("agregarColorForm");
-
-function abrirEditarColor(id) {
-  const colorData = macetasData.find(m => m.id_maceta_color == id);
-  if (!colorData) return;
-
-  formEditarColor.style.display = "flex";
-  tabla.style.display = 'none';
-  searchInput.parentElement.style.display = 'none';
-
-  document.getElementById("selectMaceta").value = colorData.maceta?.id_maceta ?? '';
-  document.getElementById("color").value = colorData.color ?? '';
-  document.getElementById("stock").value = colorData.stock ?? 0;
-
-  agregarColorForm.onsubmit = async (e) => {
-    e.preventDefault();
-    await actualizarColor(colorData.id_maceta_color);
-  };
+// ---------------- Cargar Inventario ----------------
+async function cargarColores() {
+  const { data, error } = await supabase.from("maceta_color")
+    .select("*, maceta(numero, descripcion, modelo, precio_venta)")
+    .order("id_maceta");
+  if(error) return console.error(error);
+  listaColores = data;
+  renderTablaColores(listaColores);
 }
 
-async function actualizarColor(id) {
-  const id_maceta = parseInt(document.getElementById("selectMaceta").value);
-  const color = document.getElementById("color").value.trim();
-  const stock = parseInt(document.getElementById("stock").value);
-  const estado = stock > 0 ? "Stock Disponible" : "Sin Stock";
+function renderTablaColores(datos){
+  tablaInventario.innerHTML = "";
+  datos.forEach(c => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${c.maceta.numero}</td>
+      <td>${c.maceta.descripcion}</td>
+      <td>${c.maceta.modelo}</td>
+      <td>${c.color}</td>
+      <td>${c.stock}</td>
+      <td>$${c.maceta.precio_venta}</td>
+      <td>${c.estado}</td>
+      <td>
+        <button class="btn-editar" data-id="${c.id_maceta_color}">✏️ Editar</button>
+        <button class="btn-eliminar" data-id="${c.id_maceta_color}">🗑️ Eliminar</button>
+      </td>
+    `;
+    tablaInventario.appendChild(tr);
+  });
 
-  try {
-    const { error } = await supabase
-      .from("maceta_color")
-      .update({ id_maceta, color, stock, estado })
-      .eq("id_maceta_color", id);
+  document.querySelectorAll("#tablaInventario .btn-editar").forEach(btn => 
+    btn.addEventListener("click", () => editarColor(btn.dataset.id))
+  );
 
-    if (error) throw error;
-
-    mostrarMensaje("Color actualizado correctamente ✅", "success");
-    formEditarColor.style.display = "none";
-    cargarMacetas();
-  } catch (err) {
-    console.error("Error al actualizar color:", err);
-    mostrarMensaje("Error al actualizar el color ❌", "error");
-  }
+  document.querySelectorAll("#tablaInventario .btn-eliminar").forEach(btn => 
+    btn.addEventListener("click", () => eliminarColor(btn.dataset.id))
+  );
 }
 
-// ------------------- ELIMINAR COLOR -------------------
-async function eliminarColor(id) {
-  if (!confirm("¿Seguro que querés eliminar este color?")) return;
+// ---------------- Select Macetas ----------------
+function renderSelectMacetas(){
+  const select = document.getElementById("selectMaceta");
+  select.innerHTML = "";
+  listaMacetas.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m.id_maceta;
+    opt.textContent = `${m.numero} - ${m.descripcion}`;
+    select.appendChild(opt);
+  });
+}
 
-  const { error } = await supabase
-    .from("maceta_color")
-    .delete()
-    .eq("id_maceta_color", id);
+// ---------------- Editar ----------------
+async function editarMaceta(id){
+  const { data, error } = await supabase.from("maceta").select("*").eq("id_maceta", id).single();
+  if(error) return console.error(error);
+  const f = formMaceta;
+  f.id_maceta.value = data.id_maceta;
+  f.numero.value = data.numero;
+  f.descripcion.value = data.descripcion;
+  f.modelo.value = data.modelo;
+  f.altura_cm.value = data.altura_cm;
+  f.ancho_cm.value = data.ancho_cm;
+  f.largo_cm.value = data.largo_cm;
+  f.precio_venta.value = data.precio_venta;
+  abrirModal(modalMaceta, "Editar Maceta", f);
+}
 
-  if (error) return mostrarMensaje("Error al eliminar color ❌", "error");
+async function editarColor(id){
+  const { data, error } = await supabase.from("maceta_color").select("*").eq("id_maceta_color", id).single();
+  if(error) return console.error(error);
+  const f = formColor;
+  f.id_maceta_color.value = data.id_maceta_color;
+  f.selectMaceta.value = data.id_maceta;
+  f.color.value = data.color;
+  f.stock.value = data.stock;
+  f.estadoColor.value = data.estado;
+  abrirModal(modalColor, "Editar Color", f);
+}
 
-  mostrarMensaje("Color eliminado correctamente ✅");
+// ---------------- Eliminar ----------------
+async function eliminarMaceta(id){
+  const confirmar = confirm("¿Estás seguro de eliminar esta maceta?");
+  if(!confirmar) return;
+
+  const { error } = await supabase.from("maceta").delete().eq("id_maceta", id);
+  if(error) return console.error(error);
+
+  alert("Maceta eliminada correctamente.");
   cargarMacetas();
 }
 
-// ------------------- AGREGAR COLOR -------------------
-const btnAgregarColor = document.getElementById("btnAgregarColor");
-const btnCancelarAgregarColor = document.getElementById("btnCancelarAgregarColor");
-const selectMaceta = document.getElementById("selectMaceta");
+async function eliminarColor(id){
+  const confirmar = confirm("¿Estás seguro de eliminar este color?");
+  if(!confirmar) return;
 
-btnAgregarColor?.addEventListener("click", async () => {
-  formAgregarColor.style.display = "flex";
-  formAgregarMaceta.style.display = "none";
-  tabla.style.display = "none";
-  searchInput.parentElement.style.display = "none";
+  const { error } = await supabase.from("maceta_color").delete().eq("id_maceta_color", id);
+  if(error) return console.error(error);
 
-  // Cargar macetas en el select
-  selectMaceta.innerHTML = '<option value="">Seleccioná una maceta</option>';
-  try {
-    const { data: macetas, error } = await supabase
-      .from("maceta")
-      .select("id_maceta, descripcion, numero, modelo");
+  alert("Color eliminado correctamente.");
+  cargarColores();
+}
 
-    if (error) throw error;
-
-    macetas.forEach(m => {
-      const option = document.createElement("option");
-      option.value = m.id_maceta;
-      option.textContent = `${m.descripcion} (#${m.numero}) - ${m.modelo}`;
-      selectMaceta.appendChild(option);
-    });
-  } catch (err) {
-    console.error("Error al cargar macetas para el select:", err);
-    mostrarMensaje("Error al cargar macetas.", "error");
-  }
-
-  agregarColorForm.onsubmit = async (e) => {
-    e.preventDefault();
-
-    const id_maceta = parseInt(selectMaceta.value);
-    const color = document.getElementById("color").value.trim();
-    const stock = parseInt(document.getElementById("stock").value);
-    const estado = stock > 0 ? "Stock Disponible" : "Sin Stock";
-
-    if (!id_maceta || !color) {
-      mostrarMensaje("Seleccioná una maceta e ingresá un color.", "error");
-      return;
-    }
-
-    try {
-      const { error } = await supabase
-        .from("maceta_color")
-        .insert([{ id_maceta, color, stock, estado }]);
-      if (error) throw error;
-
-      mostrarMensaje("Color agregado correctamente ✅", "success");
-      agregarColorForm.reset();
-      formAgregarColor.style.display = "none";
-      tabla.style.display = "table";
-      searchInput.parentElement.style.display = "block";
-      cargarMacetas();
-    } catch (err) {
-      console.error("Error al agregar color:", err);
-      mostrarMensaje("Error al agregar el color ❌", "error");
-    }
+// ---------------- Guardar ----------------
+formMaceta.addEventListener("submit", async e=>{
+  e.preventDefault();
+  const f = formMaceta;
+  const obj = {
+    numero: f.numero.value,
+    descripcion: f.descripcion.value,
+    modelo: f.modelo.value,
+    altura_cm: parseFloat(f.altura_cm.value),
+    ancho_cm: parseFloat(f.ancho_cm.value),
+    largo_cm: parseFloat(f.largo_cm.value),
+    precio_venta: parseFloat(f.precio_venta.value)
   };
+  if(f.id_maceta.value){
+    await supabase.from("maceta").update(obj).eq("id_maceta", f.id_maceta.value);
+  } else {
+    await supabase.from("maceta").insert([obj]);
+  }
+  f.reset();
+  modalMaceta.classList.add("oculto");
+  cargarMacetas();
 });
 
-btnCancelarAgregarColor?.addEventListener("click", () => {
-  formAgregarColor.style.display = "none";
-  agregarColorForm.reset();
-  tabla.style.display = "table";
-  searchInput.parentElement.style.display = "block";
+formColor.addEventListener("submit", async e=>{
+  e.preventDefault();
+  const f = formColor;
+  const obj = {
+    id_maceta: f.selectMaceta.value,
+    color: f.color.value,
+    stock: parseInt(f.stock.value),
+    estado: f.estadoColor.value
+  };
+  if(f.id_maceta_color.value){
+    await supabase.from("maceta_color").update(obj).eq("id_maceta_color", f.id_maceta_color.value);
+  } else {
+    await supabase.from("maceta_color").insert([obj]);
+  }
+  f.reset();
+  modalColor.classList.add("oculto");
+  cargarColores();
 });
 
-// ------------------- FILTRADO -------------------
-searchInput?.addEventListener('input', (e) => {
-  const searchText = e.target.value.toLowerCase();
-  const filtered = macetasData.filter(item => {
-    return (
-      (item.maceta?.numero?.toString().toLowerCase().includes(searchText)) ||
-      (item.maceta?.descripcion?.toLowerCase().includes(searchText)) ||
-      (item.maceta?.modelo?.toLowerCase().includes(searchText)) ||
-      (item.color?.toLowerCase().includes(searchText)) ||
-      (item.stock?.toString().includes(searchText)) ||
-      (item.maceta?.precio_venta?.toString().includes(searchText)) ||
-      (item.estado?.toLowerCase().includes(searchText))
-    );
+// ---------------- Buscadores ----------------
+document.getElementById("buscadorMacetas").addEventListener("input", () => {
+  const query = normalizar(document.getElementById("buscadorMacetas").value.trim());
+  const filtradas = listaMacetas.filter(m => {
+    return normalizar(m.numero).includes(query) ||
+           normalizar(m.descripcion).includes(query) ||
+           normalizar(m.modelo).includes(query) ||
+           normalizar(m.altura_cm).includes(query) ||
+           normalizar(m.ancho_cm).includes(query) ||
+           normalizar(m.largo_cm).includes(query) ||
+           normalizar(m.precio_venta).includes(query);
   });
-  mostrarTabla(filtered);
+  renderTablaMacetas(filtradas);
 });
 
-// ------------------- INICIO -------------------
+document.getElementById("buscadorInventario").addEventListener("input", () => {
+  const query = normalizar(document.getElementById("buscadorInventario").value.trim());
+  const filtradas = listaColores.filter(c => {
+    return normalizar(c.maceta.numero).includes(query) ||
+           normalizar(c.maceta.descripcion).includes(query) ||
+           normalizar(c.maceta.modelo).includes(query) ||
+           normalizar(c.color).includes(query) ||
+           normalizar(c.stock).includes(query) ||
+           normalizar(c.maceta.precio_venta).includes(query) ||
+           normalizar(c.estado).includes(query);
+  });
+  renderTablaColores(filtradas);
+});
+
+// ---------------- Inicializar ----------------
 cargarMacetas();
+cargarColores();

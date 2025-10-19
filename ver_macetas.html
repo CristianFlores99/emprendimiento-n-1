@@ -3,95 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventario de Macetas</title>
+  <title>Gestión de Macetas</title>
   <link rel="stylesheet" href="css/ver_macetas.css">
 </head>
 <body>
-  <div class="container">
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <h2>Gestión de Macetas</h2>
-      <button onclick="window.location.href='index.html'">Volver</button>
-      <button id="btnVerInventario">Ver Inventario</button>
-      <button id="btnAgregarMaceta">Agregar Maceta</button>
-
-      <button id="btnRecargar">Recargar</button>
-    </div>
-    <!-- Fin Sidebar -->
-
-    <div class="main" id="zonaPrincipal" style="display:none;">
-  <h1>Listado de Macetas</h1>
-  <p>Visualizá los modelos, colores y stock registrados.</p>
-
-  <!-- Buscador -->
-  <div class="search-bar" style="margin: 12px 0;">
-    <input
-      id="searchInput"
-      type="search"
-      placeholder="Buscar por número, descripción, modelo, color, stock, precio o estado..."
-    />
+<div class="app-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Gestión de Macetas</h2>
+    <button id="btnVerMacetas" class="btn-nav active">Ver Macetas Registradas</button>
+    <button id="btnVerInventario" class="btn-nav">Ver Inventario</button>
+    <button id="btnVolver" class="btn-nav">Volver</button>
   </div>
 
-  <!-- Botón agregar color -->
-  <button id="btnAgregarColor">Agregar Color</button>
+  <!-- Contenido principal -->
+  <div class="content">
+    <!-- Sección Macetas Registradas -->
+    <section id="sectionMacetas">
+      <div class="header">
+        <h2>Macetas Registradas</h2>
+        <button id="btnAgregarMaceta" class="btn-agregar">Agregar Maceta</button>
+      </div>
+      <input type="text" id="buscadorMacetas" placeholder="Buscar maceta..." class="input-buscador">
+      <table id="tablaMacetas">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Descripción</th>
+            <th>Modelo</th>
+            <th>Altura (cm)</th>
+            <th>Ancho (cm)</th>
+            <th>Largo (cm)</th>
+            <th>Precio Venta</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
 
-  <!-- Tabla de macetas -->
-  <table id="tablaMacetas"></table>
+    <!-- Sección Inventario -->
+    <section id="sectionInventario" class="oculto">
+      <div class="header">
+        <h2>Inventario de Colores</h2>
+        <button id="btnAgregarColor" class="btn-agregar">Agregar Color</button>
+      </div>
+      <input type="text" id="buscadorInventario" placeholder="Buscar inventario..." class="input-buscador">
+      <table id="tablaInventario">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Descripción</th>
+            <th>Modelo</th>
+            <th>Color</th>
+            <th>Stock</th>
+            <th>Precio Venta</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
 </div>
 
-
-    <!-- Modal Agregar Maceta -->
-    <div id="formAgregarMaceta" class="modal" style="display:none;">
-      <div class="modal-content">
-        <span id="btnCancelarAgregar" class="close">&times;</span>
-        <h2>Agregar Nueva Maceta</h2>
-        <form id="agregarMacetaForm">
-          <label>Número:</label>
-          <input type="number" id="numero" required />
-          <label>Descripción:</label>
-          <input type="text" id="descripcion" required />
-          <label>Modelo:</label>
-          <input type="text" id="modelo" required />
-          <label>Altura (cm):</label>
-          <input type="number" id="altura" required />
-          <label>Ancho (cm):</label>
-          <input type="number" id="ancho" required />
-          <label>Largo (cm):</label>
-          <input type="number" id="largo" required />
-          <label>Precio de Venta:</label>
-          <input type="number" id="precio_venta" required />
-          <button type="submit">Guardar Maceta</button>
-        </form>
-      </div>
-    </div>
-    <!-- Fin Modal Maceta -->
-
-    <!-- Modal Agregar Color -->
-    <div id="formAgregarColor" class="modal" style="display:none;">
-      <div class="modal-content">
-        <span id="btnCancelarAgregarColor" class="close">&times;</span>
-        <h2>Agregar / Editar Color de Maceta</h2>
-        <form id="agregarColorForm">
-          <label>Maceta:</label>
-          <select id="selectMaceta" required>
-            <option value="">Seleccioná una maceta</option>
-          </select>
-
-          <label>Color:</label>
-          <input type="text" id="color" required />
-
-          <label>Stock:</label>
-          <input type="number" id="stock" value="0" min="0" required />
-
-          <button type="submit" id="btnGuardarColor">Guardar Color</button>
-        </form>
-      </div>
-    </div>
-    <!-- Fin Modal Color -->
-
+<!-- Modales -->
+<div id="modalMaceta" class="modal oculto">
+  <div class="modal-content">
+    <span class="cerrar">&times;</span>
+    <h2>Agregar Maceta</h2>
+    <form id="formMaceta">
+      <input type="hidden" id="id_maceta" name="id_maceta">
+      <input type="text" id="numero" name="numero" placeholder="Número" required>
+      <input type="text" id="descripcion" name="descripcion" placeholder="Descripción" required>
+      <input type="text" id="modelo" name="modelo" placeholder="Modelo" required>
+      <input type="number" id="altura_cm" name="altura_cm" placeholder="Altura (cm)" required>
+      <input type="number" id="ancho_cm" name="ancho_cm" placeholder="Ancho (cm)" required>
+      <input type="number" id="largo_cm" name="largo_cm" placeholder="Largo (cm)" required>
+      <input type="number" id="precio_venta" name="precio_venta" placeholder="Precio Venta" step="0.01" required>
+      <button type="submit" class="btn-guardar">Guardar</button>
+    </form>
   </div>
+</div>
 
-  <script type="module" src="js/ver_macetas.js"></script>
+<div id="modalColor" class="modal oculto">
+  <div class="modal-content">
+    <span class="cerrar">&times;</span>
+    <h2>Agregar Color</h2>
+    <form id="formColor">
+      <input type="hidden" id="id_maceta_color" name="id_maceta_color">
+      <select id="selectMaceta" name="selectMaceta" required></select>
+      <input type="text" id="color" name="color" placeholder="Color" required>
+      <input type="number" id="stock" name="stock" placeholder="Stock" required>
+      <select id="estadoColor" name="estadoColor" required>
+        <option value="Stock Disponible">Stock Disponible</option>
+        <option value="Sin Stock">Sin Stock</option>
+      </select>
+      <button type="submit" class="btn-guardar">Guardar</button>
+    </form>
+  </div>
+</div>
+
+<script type="module" src="js/ver_macetas.js"></script>
 </body>
 </html>
