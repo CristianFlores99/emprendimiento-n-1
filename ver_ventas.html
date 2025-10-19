@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Ventas</title>
+  <link rel="stylesheet" href="css/ver_ventas.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>Registro de Ventas</h2>
+      <button id="btnVolver">Volver</button>
+      <button id="btnAgregarVenta">Agregar Venta</button>
+      <input type="text" id="buscador" placeholder="Buscar...">
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+      <h1>Ventas</h1>
+      <table id="tablaVentas">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Productos</th>
+            <th>Total</th>
+            <th>Forma Pago</th>
+            <th>Observaciones</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modalVenta" class="modal oculto">
+    <div class="modal-content">
+      <span class="cerrar">&times;</span>
+      <h2>Agregar Venta</h2>
+      <form id="formVenta">
+        <input type="hidden" id="id_venta">
+        <label>Cliente</label>
+        <input type="text" id="cliente" required>
+        <label>Forma de pago</label>
+        <input type="text" id="forma_pago" required>
+        <label>Observaciones</label>
+        <input type="text" id="observaciones">
+
+        <h3>Productos</h3>
+        <div class="productos-temporal">
+          <table id="tablaTemporal">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p>Total: $<span id="totalVenta">0</span></p>
+        </div>
+
+        <h4>Agregar Producto</h4>
+        <select id="tipo_producto">
+          <option value="planta">Planta</option>
+          <option value="maceta">Maceta</option>
+          <option value="tierra">Tierra</option>
+        </select>
+        <select id="selectProducto"></select>
+        <input type="number" id="cantidadProducto" min="1" value="1">
+        <button type="button" id="btnAgregarProducto">Agregar Producto</button>
+
+        <button type="submit" class="btn-guardar">Guardar Venta</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/ver_ventas.js"></script>
+</body>
+</html>
