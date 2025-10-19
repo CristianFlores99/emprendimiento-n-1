@@ -8,21 +8,26 @@
 </head>
 <body>
   <div class="app-container">
-    <aside class="sidebar">
-      <h2>Gestión de Plantas</h2>
+    <!-- 🌿 SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2>Gestión de Plantas</h2>
+        <button id="btnToggle" class="btn-toggle">☰</button>
+      </div>
       <button class="btn-nav" data-section="inventario">Ver Inventario</button>
     </aside>
 
+    <!-- 🌿 CONTENIDO PRINCIPAL -->
     <main class="content">
       <section id="inventario" class="section active">
         <div class="header">
-            <button id="btnVolver" class="btn-volver">← Volver</button>
+          <button id="btnVolver" class="btn-volver">← Volver</button>
           <h1>Inventario de Plantas</h1>
           <button id="btnAgregar" class="btn-agregar">+ Agregar Planta</button>
         </div>
 
         <div class="buscador">
-            <input type="text" id="inputBuscar" placeholder="Buscar por nombre, tipo o variedad...">
+          <input type="text" id="inputBuscar" placeholder="Buscar por nombre, tipo o variedad...">
         </div>
 
         <table id="tablaPlantas">
@@ -70,5 +75,14 @@
   </div>
 
   <script type="module" src="js/ver_plantas.js"></script>
+  <script>
+    // --- Botón para mostrar/ocultar el sidebar ---
+    const btnToggle = document.getElementById("btnToggle");
+    const sidebar = document.getElementById("sidebar");
+
+    btnToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("collapsed");
+    });
+  </script>
 </body>
 </html>

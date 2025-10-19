@@ -1,3 +1,4 @@
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -7,48 +8,69 @@
 
 body {
   background: #f4f6fb;
+  color: #111;
+  overflow-x: hidden;
 }
 
+/* --- CONTENEDORES --- */
 .app-container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
 /* --- SIDEBAR --- */
 .sidebar {
-  width: 220px;
+  width: 240px;
   background: #0f172a;
   color: #fff;
   display: flex;
   flex-direction: column;
   padding: 20px;
+  transition: transform 0.3s ease;
+  z-index: 100;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .sidebar h2 {
   font-size: 1.2rem;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #334155;
-  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.btn-toggle {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.6rem;
+  cursor: pointer;
+  display: none;
 }
 
 .btn-nav {
   background: none;
-  color: #fff;
+  color: #e2e8f0;
   border: none;
-  padding: 10px 0;
+  padding: 10px;
   text-align: left;
   cursor: pointer;
-  font-size: 1rem;
+  border-radius: 8px;
+  transition: background 0.2s;
 }
 
 .btn-nav:hover {
+  background: #1e293b;
   color: #93c5fd;
 }
 
-/* --- CONTENT --- */
+/* --- CONTENIDO --- */
 .content {
   flex: 1;
-  padding: 30px;
+  padding: 25px;
   overflow-y: auto;
 }
 
@@ -56,7 +78,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+h1 {
+  font-size: 1.5rem;
+  color: #0f172a;
 }
 
 .btn-agregar {
@@ -66,19 +95,59 @@ body {
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
 }
 
 .btn-agregar:hover {
-  background: #1e40af;
+  background: #1d4ed8;
 }
 
-/* --- TABLE --- */
+.btn-volver {
+  background: #6b7280;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-volver:hover {
+  background: #4b5563;
+}
+
+/* --- BUSCADOR --- */
+.buscador {
+  margin-bottom: 15px;
+  text-align: right;
+}
+
+#inputBuscar {
+  padding: 10px;
+  width: 280px;
+  max-width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+}
+
+#inputBuscar:focus {
+  border-color: #2563eb;
+}
+
+/* --- TABLA --- */
+.tabla-responsive {
+  width: 100%;
+  overflow-x: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
+  min-width: 800px;
 }
 
 thead {
@@ -87,7 +156,7 @@ thead {
 }
 
 th, td {
-  padding: 12px;
+  padding: 10px;
   text-align: left;
   border-bottom: 1px solid #e2e8f0;
 }
@@ -98,12 +167,11 @@ tbody tr:hover {
 
 .btn-editar {
   background: #fbbf24;
-  color: #000;
   border: none;
   padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .btn-editar:hover {
@@ -114,23 +182,24 @@ tbody tr:hover {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.5);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .oculto {
-  display: none;
+  display: none !important;
 }
 
 .modal-content {
   background: #fff;
   padding: 20px;
   border-radius: 12px;
-  width: 360px;
+  width: 90%;
+  max-width: 400px;
   position: relative;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .cerrar {
@@ -149,7 +218,7 @@ form {
 }
 
 form input, form select {
-  padding: 8px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
 }
@@ -161,42 +230,82 @@ form input, form select {
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
 }
 
 .btn-guardar:hover {
-  background: #15803d;
+  background: #16a34a;
 }
 
-.buscador {
-  margin-bottom: 15px;
-  text-align: right;
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  /* El botón ☰ aparece */
+  .btn-toggle {
+    display: block;
+  }
+
+  /* Sidebar oculto por defecto */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transform: translateX(-100%);
+    box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+  }
+
+  /* Cuando está activo, se muestra */
+  .sidebar.collapsed {
+    transform: translateX(0);
+  }
+
+  /* El contenido ocupa toda la pantalla */
+  .content {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  table {
+    font-size: 0.85rem;
+    min-width: 600px;
+  }
+
+  th, td {
+    padding: 8px;
+  }
+
+  #inputBuscar {
+    width: 100%;
+  }
+
+  .btn-agregar, .btn-volver {
+    width: 100%;
+  }
+
+  /* Permitir scroll horizontal para tabla */
+  .tabla-responsive {
+    overflow-x: auto;
+  }
 }
 
-#inputBuscar {
-  padding: 8px 12px;
-  width: 280px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-  transition: border 0.3s;
-}
+/* --- Ajuste para pantallas muy pequeñas --- */
+@media (max-width: 480px) {
+  table {
+    font-size: 0.8rem;
+    min-width: 500px;
+  }
 
-#inputBuscar:focus {
-  border-color: #2563eb;
-}
+  .modal-content {
+    max-width: 90%;
+    padding: 15px;
+  }
 
-.btn-volver {
-  background: #6b7280;
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  margin-right: 10px;
-  transition: background 0.3s;
-}
-
-.btn-volver:hover {
-  background: #4b5563;
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }
