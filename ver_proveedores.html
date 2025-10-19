@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proveedores</title>
+  <link rel="stylesheet" href="css/ver_proveedores.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>Gestión de Proveedores</h2>
+      <button id="btnVolver">⬅ Volver</button>
+      <button id="btnAgregarProveedor">➕ Agregar Proveedor</button>
+      <input type="text" id="buscadorProveedores" placeholder="Buscar..." />
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+      <h1>Lista de Proveedores</h1>
+      <table id="tablaProveedores">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal Agregar/Editar Proveedor -->
+  <div class="modal oculto" id="modalProveedor">
+    <div class="modal-content">
+      <span class="cerrar">&times;</span>
+      <h2>Agregar Proveedor</h2>
+      <form id="formProveedor">
+        <input type="hidden" id="id_proveedor">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="email" id="email" placeholder="Email">
+        <input type="text" id="telefono" placeholder="Teléfono">
+        <input type="text" id="direccion" placeholder="Dirección">
+        <select id="estado" required>
+          <option value="Activo">Activo</option>
+          <option value="Inactivo">Inactivo</option>
+        </select>
+        <button type="submit" class="btn-guardar">Guardar</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/ver_proveedores.js"></script>
+</body>
+</html>
