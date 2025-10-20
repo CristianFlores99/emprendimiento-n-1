@@ -3,41 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ver Tierras</title>
+  <title>Gestión de Tierras</title>
   <link rel="stylesheet" href="css/ver_tierras.css">
 </head>
 <body>
   <div class="app-container">
-    <!-- Sidebar -->
-    <div class="sidebar">
+    <!-- 🌿 SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
       <h2>Gestión de Tierras</h2>
       <button id="btnVolver">⬅ Volver</button>
-      <button id="btnAgregarTierra" class="btn-agregar">➕ Agregar Tierra</button>
-      <input type="text" id="buscadorTierras" placeholder="Buscar..." />
-    </div>
+      <button class="btn-nav" data-section="inventario">Ver Inventario</button>
 
-    <!-- Main content -->
-    <div class="content">
-      <h1>Inventario de Tierras</h1>
-      <table id="tablaTierras">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Tipo</th>
-            <th>Contenido (dm³)</th>
-            <th>Peso (kg)</th>
-            <th>Precio Venta</th>
-            <th>Stock</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+      <!-- Flecha deslizante -->
+      <button class="btn-open-sidebar" id="btnOpenSidebar">←</button>
+    </aside>
+
+    <!-- 🌿 CONTENIDO PRINCIPAL -->
+    <main class="content">
+      <section id="inventario" class="section active">
+        <div class="header">
+          <h1>Inventario de Tierras</h1>
+          <button id="btnAgregarTierra" class="btn-agregar">➕ Agregar Tierra</button>
+        </div>
+
+        <div class="buscador">
+          <input type="text" id="buscadorTierras" placeholder="Buscar por nombre, tipo, contenido...">
+        </div>
+
+        <div class="tabla-responsive">
+          <table id="tablaTierras">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Contenido (dm³)</th>
+                <th>Peso (kg)</th>
+                <th>Precio Venta</th>
+                <th>Stock</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <!-- Modal -->
+  <!-- 🌿 MODAL FORMULARIO -->
   <div class="modal oculto" id="modalTierra">
     <div class="modal-content">
       <span class="cerrar">&times;</span>
@@ -60,6 +74,24 @@
     </div>
   </div>
 
+  <div class="overlay" id="overlay"></div>
+
   <script type="module" src="js/ver_tierras.js"></script>
+  <script>
+    const sidebar = document.getElementById("sidebar");
+    const btnOpenSidebar = document.getElementById("btnOpenSidebar");
+    const overlay = document.getElementById("overlay");
+
+    // Abrir/Cerrar panel
+    btnOpenSidebar.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
+    });
+
+    overlay.addEventListener("click", () => {
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+    });
+  </script>
 </body>
 </html>

@@ -7,18 +7,25 @@
   <link rel="stylesheet" href="css/ver_ventas.css">
 </head>
 <body>
-  <div class="app-container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <h2>Registro de Ventas</h2>
-      <button id="btnVolver">Volver</button>
-      <button id="btnAgregarVenta">Agregar Venta</button>
-      <input type="text" id="buscador" placeholder="Buscar...">
-    </div>
 
-    <!-- Main content -->
-    <div class="content">
-      <h1>Ventas</h1>
+<div class="app-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Gestión de Ventas</h2>
+    <button id="btnVolver" class="btn-nav">Volver</button>
+    <button id="btnVerVentas" class="btn-nav">Ver Registro de Ventas</button>
+    <!-- Flecha de deslizamiento móvil -->
+    <button class="btn-open-sidebar">➤</button>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="content">
+    <section id="sectionVentas">
+      <div class="header">
+        <h2>Ventas</h2>
+        <button id="btnAgregarVenta" class="btn-agregar">Agregar Venta</button>
+      </div>
+      <input type="text" id="buscador" placeholder="Buscar..." class="input-buscador">
       <table id="tablaVentas">
         <thead>
           <tr>
@@ -33,56 +40,100 @@
         </thead>
         <tbody></tbody>
       </table>
-    </div>
+    </section>
   </div>
+</div>
 
-  <!-- Modal -->
-  <div id="modalVenta" class="modal oculto">
-    <div class="modal-content">
-      <span class="cerrar">&times;</span>
-      <h2>Agregar Venta</h2>
-      <form id="formVenta">
-        <input type="hidden" id="id_venta">
-        <label>Cliente</label>
-        <input type="text" id="cliente" required>
-        <label>Forma de pago</label>
-        <input type="text" id="forma_pago" required>
-        <label>Observaciones</label>
-        <input type="text" id="observaciones">
+<!-- Modal Agregar Venta -->
+<div id="modalVenta" class="modal oculto">
+  <div class="modal-content">
+    <span class="cerrar">&times;</span>
+    <h2>Agregar Venta</h2>
+    <form id="formVenta">
+      <input type="hidden" id="id_venta">
+      <label>Cliente</label>
+      <input type="text" id="cliente" required>
+      <label>Forma de pago</label>
+      <input type="text" id="forma_pago" required>
+      <label>Observaciones</label>
+      <input type="text" id="observaciones">
 
-        <h3>Productos</h3>
-        <div class="productos-temporal">
-          <table id="tablaTemporal">
-            <thead>
-              <tr>
-                <th>Tipo</th>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Subtotal</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-          <p>Total: $<span id="totalVenta">0</span></p>
-        </div>
+      <h3>Productos</h3>
+      <div class="productos-temporal">
+        <table id="tablaTemporal">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Subtotal</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p>Total: $<span id="totalVenta">0</span></p>
+      </div>
 
-        <h4>Agregar Producto</h4>
-        <select id="tipo_producto">
-          <option value="planta">Planta</option>
-          <option value="maceta">Maceta</option>
-          <option value="tierra">Tierra</option>
-        </select>
-        <select id="selectProducto"></select>
-        <input type="number" id="cantidadProducto" min="1" value="1">
-        <button type="button" id="btnAgregarProducto">Agregar Producto</button>
+      <h4>Agregar Producto</h4>
+      <select id="tipo_producto">
+        <option value="planta">Planta</option>
+        <option value="maceta">Maceta</option>
+        <option value="tierra">Tierra</option>
+      </select>
+      <select id="selectProducto"></select>
+      <input type="number" id="cantidadProducto" min="1" value="1">
+      <button type="button" id="btnAgregarProducto">Agregar Producto</button>
 
-        <button type="submit" class="btn-guardar">Guardar Venta</button>
-      </form>
-    </div>
+      <button type="submit" class="btn-guardar">Guardar Venta</button>
+    </form>
   </div>
+</div>
 
-  <script type="module" src="js/ver_ventas.js"></script>
+<script type="module" src="js/ver_ventas.js"></script>
+<script>
+  // Sidebar móvil con flechita
+  const sidebar = document.querySelector('.sidebar');
+  const btnOpenSidebar = document.querySelector('.btn-open-sidebar');
+  const content = document.querySelector('.content');
+  const btnVerVentas = document.getElementById("btnVerVentas");
+  const sectionVentas = document.getElementById("sectionVentas");
+
+  btnVerVentas.addEventListener("click", () => {
+  // Asegurarse que la sección sea visible (en caso de ocultar otras)
+  sectionVentas.scrollIntoView({ behavior: "smooth" });
+  // También puedes abrir el sidebar si está colapsado en móvil
+  if(!sidebar.classList.contains("active") && window.innerWidth <= 768){
+    sidebar.classList.add("active");
+    btnOpenSidebar.textContent = '◀';
+    btnOpenSidebar.style.left = sidebar.offsetWidth + 5 + 'px';
+    content.style.transform = `translateX(${sidebar.offsetWidth}px)`;
+    }
+  });
+
+
+
+  btnOpenSidebar.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+
+    if (sidebar.classList.contains('active')) {
+      btnOpenSidebar.textContent = '◀';
+      btnOpenSidebar.style.left = sidebar.offsetWidth + 5 + 'px';
+      content.style.transform = `translateX(${sidebar.offsetWidth}px)`;
+    } else {
+      btnOpenSidebar.textContent = '➤';
+      btnOpenSidebar.style.left = '5px';
+      content.style.transform = 'translateX(0)';
+    }
+  });
+
+  // Ajuste inicial al cargar
+  if (window.innerWidth <= 768) {
+    btnOpenSidebar.style.left = '5px';
+    content.style.transform = 'translateX(0)';
+  }
+</script>
+
 </body>
 </html>

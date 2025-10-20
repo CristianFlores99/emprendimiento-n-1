@@ -9,6 +9,7 @@
 body {
   background-color: #f4f6fb;
   color: #111;
+  min-height: 100vh;
 }
 
 /* -------------------- Container -------------------- */
@@ -26,7 +27,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  transition: width 0.3s;
+  transition: all 0.3s ease;
 }
 
 .sidebar h2 {
@@ -34,6 +35,9 @@ body {
   margin-bottom: 30px;
   text-align: center;
   color: #93c5fd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar button {
@@ -47,6 +51,9 @@ body {
   cursor: pointer;
   border-radius: 6px;
   transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar button:hover {
@@ -77,7 +84,7 @@ body {
   color: #334155;
 }
 
-/* -------------------- Botones en Main -------------------- */
+/* Botones en Main */
 .main button {
   background-color: #2563eb;
   color: #fff;
@@ -98,16 +105,45 @@ body {
   .container {
     flex-direction: column;
   }
+
+  /* Sidebar horizontal */
   .sidebar {
     width: 100%;
     flex-direction: row;
     justify-content: space-around;
-    padding: 15px;
+    padding: 10px;
+    overflow-x: auto;
   }
+
   .sidebar h2 {
     display: none;
   }
+
+  .sidebar button {
+    flex: 0 0 auto;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  /* Main content */
   .main {
     padding: 20px;
+  }
+
+  .main h1 {
+    font-size: 1.6rem;
+  }
+
+  .main p {
+    font-size: 0.95rem;
+  }
+
+  /* Scroll suave para sidebar si hay muchos botones */
+  .sidebar::-webkit-scrollbar {
+    height: 6px;
+  }
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
   }
 }

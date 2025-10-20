@@ -10,18 +10,20 @@
   <div class="app-container">
     <!-- 🌿 SIDEBAR -->
     <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <h2>Gestión de Plantas</h2>
-        <button id="btnToggle" class="btn-toggle">☰</button>
-      </div>
+      <h2>Gestión de Plantas</h2>
+
+      <!-- Botón volver al panel -->
+      <button id="btnVolver" class="btn-nav">← Volver al Panel</button>
+
       <button class="btn-nav" data-section="inventario">Ver Inventario</button>
+      <!-- Flecha para abrir/cerrar en móvil -->
+      <button class="btn-open-sidebar" id="btnOpenSidebar">←</button>
     </aside>
 
     <!-- 🌿 CONTENIDO PRINCIPAL -->
     <main class="content">
       <section id="inventario" class="section active">
         <div class="header">
-          <button id="btnVolver" class="btn-volver">← Volver</button>
           <h1>Inventario de Plantas</h1>
           <button id="btnAgregar" class="btn-agregar">+ Agregar Planta</button>
         </div>
@@ -30,22 +32,24 @@
           <input type="text" id="inputBuscar" placeholder="Buscar por nombre, tipo o variedad...">
         </div>
 
-        <table id="tablaPlantas">
-          <thead>
-            <tr>
-              <th>Nombre Comercial</th>
-              <th>Tipo</th>
-              <th>Tamaño</th>
-              <th>Variedad</th>
-              <th>Precio Costo</th>
-              <th>Precio Venta</th>
-              <th>Stock</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="tabla-responsive">
+          <table id="tablaPlantas">
+            <thead>
+              <tr>
+                <th>Nombre Comercial</th>
+                <th>Tipo</th>
+                <th>Tamaño</th>
+                <th>Variedad</th>
+                <th>Precio Costo</th>
+                <th>Precio Venta</th>
+                <th>Stock</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </section>
     </main>
   </div>
@@ -74,14 +78,29 @@
     </div>
   </div>
 
+  <div class="overlay" id="overlay"></div>
+
   <script type="module" src="js/ver_plantas.js"></script>
   <script>
-    // --- Botón para mostrar/ocultar el sidebar ---
-    const btnToggle = document.getElementById("btnToggle");
     const sidebar = document.getElementById("sidebar");
+    const btnOpenSidebar = document.getElementById("btnOpenSidebar");
+    const overlay = document.getElementById("overlay");
+    const btnVolver = document.getElementById("btnVolver");
 
-    btnToggle.addEventListener("click", () => {
-      sidebar.classList.toggle("collapsed");
+    // Abrir/Cerrar panel
+    btnOpenSidebar.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
+    });
+
+    overlay.addEventListener("click", () => {
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+    });
+
+    // Volver al panel
+    btnVolver.addEventListener("click", () => {
+      window.location.href = "index.html";
     });
   </script>
 </body>

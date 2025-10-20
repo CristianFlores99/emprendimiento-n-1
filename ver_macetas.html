@@ -7,24 +7,25 @@
   <link rel="stylesheet" href="css/ver_macetas.css">
 </head>
 <body>
-  
+
 <div class="app-container">
   <!-- Sidebar -->
   <div class="sidebar">
     <h2>Gestión de Macetas</h2>
-    
     <button id="btnVerMacetas" class="btn-nav active">Ver Macetas Registradas</button>
     <button id="btnVerInventario" class="btn-nav">Ver Inventario</button>
     <button id="btnVolver" class="btn-nav">Volver</button>
+
+    <!-- Flecha de deslizamiento móvil -->
+    <button class="btn-open-sidebar">➤</button>
   </div>
 
   <!-- Contenido principal -->
   <div class="content">
-    <button class="btn-toggle-sidebar">☰ Menú</button>
+
     <!-- Sección Macetas Registradas -->
     <section id="sectionMacetas">
       <div class="header">
-        
         <h2>Macetas Registradas</h2>
         <button id="btnAgregarMaceta" class="btn-agregar">Agregar Maceta</button>
       </div>
@@ -69,6 +70,7 @@
         <tbody></tbody>
       </table>
     </section>
+
   </div>
 </div>
 
@@ -110,5 +112,32 @@
 </div>
 
 <script type="module" src="js/ver_macetas.js"></script>
+<script>
+  // Sidebar móvil con flechita
+  const sidebar = document.querySelector('.sidebar');
+  const btnOpenSidebar = document.querySelector('.btn-open-sidebar');
+  const content = document.querySelector('.content');
+
+  btnOpenSidebar.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+
+    if (sidebar.classList.contains('active')) {
+      btnOpenSidebar.textContent = '◀';
+      btnOpenSidebar.style.left = sidebar.offsetWidth + 5 + 'px';
+      content.style.transform = `translateX(${sidebar.offsetWidth}px)`;
+    } else {
+      btnOpenSidebar.textContent = '➤';
+      btnOpenSidebar.style.left = '5px';
+      content.style.transform = 'translateX(0)';
+    }
+  });
+
+  // Ajuste inicial al cargar
+  if (window.innerWidth <= 768) {
+    btnOpenSidebar.style.left = '5px';
+    content.style.transform = 'translateX(0)';
+  }
+</script>
+
 </body>
 </html>

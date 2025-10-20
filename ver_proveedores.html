@@ -7,54 +7,89 @@
   <link rel="stylesheet" href="css/ver_proveedores.css">
 </head>
 <body>
-  <div class="app-container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <h2>Gestión de Proveedores</h2>
-      <button id="btnVolver">⬅ Volver</button>
-      <button id="btnAgregarProveedor">➕ Agregar Proveedor</button>
-      <input type="text" id="buscadorProveedores" placeholder="Buscar..." />
-    </div>
+<div class="app-container">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <h2>Gestión de Proveedores</h2>
+    <button id="btnVolver" class="btn-nav">Volver</button>
+    <button id="btnVerLista" class="btn-nav active">Ver Lista de Proveedores</button>
+    <!-- Flecha deslizante -->
+    <button class="btn-open-sidebar" id="btnOpenSidebar">➤</button>
+  </aside>
 
-    <!-- Main content -->
-    <div class="content">
-      <h1>Lista de Proveedores</h1>
-      <table id="tablaProveedores">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Dirección</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="content">
+    <section id="sectionListaProveedores">
+      <div class="header">
+        <h2>Lista de Proveedores</h2>
+        <button id="btnAgregarProveedor" class="btn-agregar">➕ Agregar Proveedor</button>
+      </div>
+      <input type="text" id="buscadorProveedores" placeholder="Buscar proveedor..." class="input-buscador">
+      <div class="tabla-responsive">
+        <table id="tablaProveedores">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Dirección</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Modal Agregar/Editar Proveedor -->
+<div class="modal oculto" id="modalProveedor">
+  <div class="modal-content">
+    <span class="cerrar">&times;</span>
+    <h2>Agregar Proveedor</h2>
+    <form id="formProveedor">
+      <input type="hidden" id="id_proveedor">
+      <input type="text" id="nombre" placeholder="Nombre" required>
+      <input type="email" id="email" placeholder="Email">
+      <input type="text" id="telefono" placeholder="Teléfono">
+      <input type="text" id="direccion" placeholder="Dirección">
+      <select id="estado" required>
+        <option value="Activo">Activo</option>
+        <option value="Inactivo">Inactivo</option>
+      </select>
+      <button type="submit" class="btn-guardar">Guardar</button>
+    </form>
   </div>
+</div>
 
-  <!-- Modal Agregar/Editar Proveedor -->
-  <div class="modal oculto" id="modalProveedor">
-    <div class="modal-content">
-      <span class="cerrar">&times;</span>
-      <h2>Agregar Proveedor</h2>
-      <form id="formProveedor">
-        <input type="hidden" id="id_proveedor">
-        <input type="text" id="nombre" placeholder="Nombre" required>
-        <input type="email" id="email" placeholder="Email">
-        <input type="text" id="telefono" placeholder="Teléfono">
-        <input type="text" id="direccion" placeholder="Dirección">
-        <select id="estado" required>
-          <option value="Activo">Activo</option>
-          <option value="Inactivo">Inactivo</option>
-        </select>
-        <button type="submit" class="btn-guardar">Guardar</button>
-      </form>
-    </div>
-  </div>
+<script type="module" src="js/ver_proveedores.js"></script>
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const btnOpenSidebar = document.getElementById('btnOpenSidebar');
+  const content = document.querySelector('.content');
 
-  <script type="module" src="js/ver_proveedores.js"></script>
+  // Abrir / cerrar sidebar
+  btnOpenSidebar.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+    if (sidebar.classList.contains('active')) {
+      btnOpenSidebar.textContent = '◀';
+      btnOpenSidebar.style.left = sidebar.offsetWidth + 5 + 'px';
+      content.style.transform = `translateX(${sidebar.offsetWidth}px)`;
+    } else {
+      btnOpenSidebar.textContent = '➤';
+      btnOpenSidebar.style.left = '5px';
+      content.style.transform = 'translateX(0)';
+    }
+  });
+
+  // Ajuste inicial para móviles
+  if (window.innerWidth <= 768) {
+    btnOpenSidebar.style.display = 'block';
+    btnOpenSidebar.style.left = '5px';
+    content.style.transform = 'translateX(0)';
+  }
+</script>
 </body>
 </html>

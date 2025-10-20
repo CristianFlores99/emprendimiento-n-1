@@ -262,9 +262,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-const btnToggleSidebar = document.querySelector(".btn-toggle-sidebar");
-const sidebar = document.querySelector(".sidebar");
-
-btnToggleSidebar.addEventListener("click", () => {
-  sidebar.classList.toggle("active");
-});

@@ -1,25 +1,24 @@
-/* RESET */
+/* -------------------- RESET -------------------- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
-
 body {
   background: #f4f6fb;
   color: #111;
   overflow-x: hidden;
 }
 
-/* --- CONTENEDORES --- */
+/* -------------------- CONTENEDOR GENERAL -------------------- */
 .app-container {
   display: flex;
   min-height: 100vh;
   overflow: hidden;
 }
 
-/* --- SIDEBAR --- */
+/* -------------------- SIDEBAR -------------------- */
 .sidebar {
   width: 240px;
   background: #0f172a;
@@ -28,29 +27,13 @@ body {
   flex-direction: column;
   padding: 20px;
   transition: transform 0.3s ease;
-  z-index: 100;
+  position: relative;
+  z-index: 1500;
 }
-
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .sidebar h2 {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
 }
-
-.btn-toggle {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.6rem;
-  cursor: pointer;
-  display: none;
-}
-
 .btn-nav {
   background: none;
   color: #e2e8f0;
@@ -59,35 +42,51 @@ body {
   text-align: left;
   cursor: pointer;
   border-radius: 8px;
+  margin-bottom: 5px;
   transition: background 0.2s;
 }
-
 .btn-nav:hover {
   background: #1e293b;
   color: #93c5fd;
 }
 
-/* --- CONTENIDO --- */
+/* Flecha deslizante */
+.btn-open-sidebar {
+  position: absolute;
+  top: 20px;
+  right: -40px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: none;
+  z-index: 1600;
+}
+.sidebar.active .btn-open-sidebar {
+  right: -40px;
+}
+
+/* -------------------- CONTENIDO -------------------- */
 .content {
   flex: 1;
   padding: 25px;
   overflow-y: auto;
 }
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
   flex-wrap: wrap;
   gap: 10px;
+  margin-bottom: 15px;
 }
-
 h1 {
   font-size: 1.5rem;
   color: #0f172a;
 }
-
 .btn-agregar {
   background: #2563eb;
   color: #fff;
@@ -97,11 +96,9 @@ h1 {
   cursor: pointer;
   font-weight: 500;
 }
-
 .btn-agregar:hover {
   background: #1d4ed8;
 }
-
 .btn-volver {
   background: #6b7280;
   color: #fff;
@@ -111,17 +108,15 @@ h1 {
   cursor: pointer;
   transition: background 0.3s;
 }
-
 .btn-volver:hover {
   background: #4b5563;
 }
 
-/* --- BUSCADOR --- */
+/* -------------------- BUSCADOR -------------------- */
 .buscador {
   margin-bottom: 15px;
   text-align: right;
 }
-
 #inputBuscar {
   padding: 10px;
   width: 280px;
@@ -130,12 +125,11 @@ h1 {
   border-radius: 8px;
   outline: none;
 }
-
 #inputBuscar:focus {
   border-color: #2563eb;
 }
 
-/* --- TABLA --- */
+/* -------------------- TABLA -------------------- */
 .tabla-responsive {
   width: 100%;
   overflow-x: auto;
@@ -143,28 +137,23 @@ h1 {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
-
 table {
   width: 100%;
   border-collapse: collapse;
   min-width: 800px;
 }
-
 thead {
   background: #0f172a;
   color: #fff;
 }
-
 th, td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #e2e8f0;
 }
-
 tbody tr:hover {
   background: #f1f5f9;
 }
-
 .btn-editar {
   background: #fbbf24;
   border: none;
@@ -173,12 +162,11 @@ tbody tr:hover {
   cursor: pointer;
   font-size: 0.85rem;
 }
-
 .btn-editar:hover {
   background: #f59e0b;
 }
 
-/* --- MODAL --- */
+/* -------------------- MODAL -------------------- */
 .modal {
   position: fixed;
   inset: 0;
@@ -186,12 +174,11 @@ tbody tr:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 3000;
 }
-
 .oculto {
   display: none !important;
 }
-
 .modal-content {
   background: #fff;
   padding: 20px;
@@ -201,7 +188,6 @@ tbody tr:hover {
   position: relative;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-
 .cerrar {
   position: absolute;
   top: 10px;
@@ -210,19 +196,16 @@ tbody tr:hover {
   cursor: pointer;
   color: #555;
 }
-
 form {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-
 form input, form select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
 }
-
 .btn-guardar {
   background: #22c55e;
   color: #fff;
@@ -232,19 +215,30 @@ form input, form select {
   cursor: pointer;
   font-weight: 500;
 }
-
 .btn-guardar:hover {
   background: #16a34a;
 }
 
-/* --- RESPONSIVE --- */
+/* -------------------- OVERLAY -------------------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1400;
+}
+.overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
 @media (max-width: 768px) {
-  /* El botón ☰ aparece */
-  .btn-toggle {
+  .btn-open-sidebar {
     display: block;
   }
-
-  /* Sidebar oculto por defecto */
   .sidebar {
     position: fixed;
     top: 0;
@@ -253,56 +247,43 @@ form input, form select {
     transform: translateX(-100%);
     box-shadow: 2px 0 6px rgba(0,0,0,0.2);
   }
-
-  /* Cuando está activo, se muestra */
-  .sidebar.collapsed {
+  .sidebar.active {
     transform: translateX(0);
   }
-
-  /* El contenido ocupa toda la pantalla */
   .content {
     padding: 15px;
   }
-
   h1 {
     font-size: 1.25rem;
+    margin-left: 45px; /* <- ajusta para que la flecha no lo tape */
   }
-
   table {
     font-size: 0.85rem;
     min-width: 600px;
   }
-
   th, td {
     padding: 8px;
   }
-
   #inputBuscar {
     width: 100%;
   }
-
   .btn-agregar, .btn-volver {
     width: 100%;
   }
-
-  /* Permitir scroll horizontal para tabla */
   .tabla-responsive {
     overflow-x: auto;
   }
 }
 
-/* --- Ajuste para pantallas muy pequeñas --- */
 @media (max-width: 480px) {
   table {
     font-size: 0.8rem;
     min-width: 500px;
   }
-
   .modal-content {
     max-width: 90%;
     padding: 15px;
   }
-
   .header {
     flex-direction: column;
     align-items: flex-start;
