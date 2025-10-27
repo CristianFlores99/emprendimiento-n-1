@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Captura con Cámara</title>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 10px;
+    }
+    video {
+      width: 90%;
+      max-width: 480px;
+      border: 3px solid #0f0;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #0f0;
+    }
+    canvas {
+      display: none;
+      margin-top: 15px;
+      border: 3px solid #09f;
+      border-radius: 10px;
+      max-width: 480px;
+    }
+    img {
+      margin-top: 15px;
+      border: 3px solid #09f;
+      border-radius: 10px;
+      max-width: 480px;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      background: #0f0;
+      color: #111;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background: #0c0;
+    }
+  </style>
+</head>
+<body>
+  <h2>📸 Cámara en Vivo</h2>
+  <video id="video" autoplay playsinline></video>
+
+  <div class="buttons">
+    <button id="startBtn">Activar Cámara</button>
+    <button id="switchBtn">Cambiar Cámara</button>
+    <button id="captureBtn">Tomar Foto</button>
+  </div>
+
+  <canvas id="canvas"></canvas>
+  <img id="photo" alt="Foto capturada">
+
+  <script>
+    const video = document.getElementById('video');
+    const startBtn = document.getElementById('startBtn');
+    const switchBtn = document.getElementById('switchBtn');
+    const captureBtn = document.getElementById('captureBtn');
+    const canvas = document.getElementById('canvas');
+    const photo = document.getElementById('photo');
+
+    let currentStream;
+    let facingMode = "user"; // "user" = frontal | "environment" = trasera
+
+    async function startCamera() {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: facingMode }
+        });
+        currentStream = stream;
+        video.srcObject = stream;
+      } catch (error) {
+        alert("No se pudo acceder a la cámara: " + error.message);
+      }
+    }
+
+    startBtn.addEventListener('click', startCamera);
+
+    switchBtn.addEventListener('click', () => {
+      facingMode = facingMode === "user" ? "environment" : "user";
+      startCamera();
+    });
+
+    captureBtn.addEventListener('click', () => {
+      const context = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Convierte la imagen del canvas en base64
+      const dataURL = canvas.toDataURL('image/png');
+      photo.src = dataURL;
+      photo.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
