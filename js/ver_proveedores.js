@@ -19,7 +19,7 @@ function normalizar(str){
 }
 
 async function cargarProveedores(){
-  const { data, error } = await supabase.from("proveedores").select("*").order("nombre");
+  const { data, error } = await supabase.from("proveedor").select("*").order("nombre");
   if(error){ console.error(error); return; }
   listaProveedores = data || [];
   renderTabla(listaProveedores);
@@ -80,9 +80,9 @@ form.addEventListener("submit", async e=>{
     estado: form.estado.value
   };
   if(form.id_proveedor.value){
-    await supabase.from("proveedores").update(obj).eq("id_proveedor", form.id_proveedor.value);
+    await supabase.from("proveedor").update(obj).eq("id_proveedor", form.id_proveedor.value);
   } else {
-    await supabase.from("proveedores").insert([obj]);
+    await supabase.from("proveedor").insert([obj]);
   }
   cerrarModal();
   cargarProveedores();
@@ -90,7 +90,7 @@ form.addEventListener("submit", async e=>{
 
 async function eliminarProveedor(id){
   if(confirm("¿Seguro que deseas eliminar este proveedor?")){
-    await supabase.from("proveedores").delete().eq("id_proveedor", id);
+    await supabase.from("proveedor").delete().eq("id_proveedor", id);
     cargarProveedores();
   }
 }
