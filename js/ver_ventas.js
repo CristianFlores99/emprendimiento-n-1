@@ -41,8 +41,7 @@ cerrar.addEventListener("click", ()=> modal.classList.add("oculto"));
 async function cargarProductos() {
   const { data: plantas } = await supabase.from("plantas").select("*");
   const { data: macetas } = await supabase.from("maceta").select("*");
-  const { data: tierras } = await supabase.from("tierras").select("*");
-  productosDisponibles = { planta: plantas, maceta: macetas, tierra: tierras };
+  productosDisponibles = { planta: plantas, maceta: macetas };
   actualizarSelect();
 }
 
